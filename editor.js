@@ -54,7 +54,6 @@ Crafty.defineScene("AnimationEditor", function(){
         });
         sidebarBackground.color("rgb(100,100,100)");
         sidebarBackground.setCenteredPos(-256,0,"right","top");
-
         
         ///////// 
         // File Upload UI
@@ -121,16 +120,21 @@ Crafty.defineScene("AnimationEditor", function(){
         
         // End File Upload UI
         /////////
+
+		var lowSidebarBackground = Crafty.e("UIOverlay, Color");
+        lowSidebarBackground.w = 256;
+        lowSidebarBackground.h = 256;
+        lowSidebarBackground.color("rgb(120,120,120)");
+        lowSidebarBackground.setCenteredPos(-256,-256,"right","bottom");
         
-        var splitterBar = Crafty.e("UIOverlay, Color");
+		var splitterBar = Crafty.e("UIOverlay, Color");
         splitterBar.w = AnimationEditor.width();
         splitterBar.bind('ViewportResize', function() {
             this.w = AnimationEditor.width();
         });
-        splitterBar.h = 16;
+        splitterBar.h = 8;
         splitterBar.color("rgb(120,100,120)");
-        splitterBar.setCenteredPos(0,64,"left","center");
-        
+        splitterBar.setCenteredPos(0,-256,"left","bottom");
         
         var delete_ico = Crafty.e("UIOverlay, __spr_cross");
         var add_ico = Crafty.e("UIOverlay, __spr_check");
@@ -158,12 +162,16 @@ Crafty.c("UploadButton", {
                 "}}";
                 console.log(spriteString);
                 Crafty.load(spriteString, function() {
-                    for (var x = 0; x < 2; x++) {
-                        for (var y = 0; y < 2; y++) {
-                            var e = Crafty.e("2D, Canvas, __spr_sheet");
+                    for (var x = 0; x < 32; x++) {
+                        for (var y = 0; y < 32; y++) {
+                            var e = Crafty.e("AnimationFrame");
+							if (e.img.height <= (y+1)*AnimationEditor.tileHeight ||
+							    e.img.width <= (x+1)*AnimationEditor.tileWidth) {
+								e.destroy();
+								continue;
+							}
                             e.x = (x*AnimationEditor.tileWidth) + 32;
                             e.y = (y*AnimationEditor.tileHeight) + 32;
-                            console.log(e);
                             e.sprite(x,y);
                         }
                     }
@@ -172,6 +180,33 @@ Crafty.c("UploadButton", {
             }
         });
     }
+});
+
+Crafty.c("AnimationFrame", {
+	init: function() {
+		this.requires('2D, Canvas, __spr_sheet, Mouse');
+		this.outline = Crafty.e('2D, Canvas, Color');
+		this.outline.w = this._w;
+		this.outline.h = this._h;
+		this.outline.color('rgb(255,255,255)');
+		this.outline.alpha = .01;
+		this.attach(this.outline);
+		this.bind('MouseOver', function() {
+			this.outline.alpha = .33;
+		});
+		this.bind('MouseOut', function() {
+			this.outline.alpha = .01;
+		});
+		this.bind('MouseDown', function() {
+			this.outline.alpha = .5;
+		});
+		this.bind('MouseUp', function() {
+			this.outline.alpha = .33;
+	    });
+		this.bind('Click', function() {
+
+		})
+	}
 });
 
 Crafty.c("AltText", {
@@ -184,6 +219,18 @@ Crafty.c("AltText", {
         this.textColor(AnimationEditor.Text.altColor);
         this.textFont(AnimationEditor.Text.defaultStyle);
     }
+});
+
+Crafty.c("DefText", {
+	init: function () {
+		this.requires("UIOverlay, Text");
+	},
+
+	setText: function(input) {
+		this.text(input);
+		this.textColor(AnimationEditor.Text.defaultColor);
+		this.textFont(AnimationEditor.Text.defaultStyle);
+	}
 });
 
 Crafty.c('UI', {
