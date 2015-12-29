@@ -4,3 +4,7 @@ This is a graphical editor for animations and sprites for CraftyJS. This will (e
 
 Demo animation from first build:
 [http://imgur.com/KCsN2Kh]
+
+# License info
+
+WTFPL

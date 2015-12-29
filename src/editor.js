@@ -17,6 +17,13 @@ AnimationEditor = {
         return this._uiGlobalZ;
     },
 
+	_nextID: -1,
+
+	getID: function() {
+		this._nextID++;
+		return this._nextID;
+	},
+
     width: function() {
         return Crafty.viewport._width;
     },
@@ -143,7 +150,7 @@ Crafty.defineScene("AnimationEditor", function(){
 		animationBackground.bind('ViewportResize', function() {
             this.w = AnimationEditor.width();
         });
-		animationBackground.color("rgba(100,60,60,.5)");
+		animationBackground.color("rgba(100,60,60,.75)");
 		animationBackground.setCenteredPos(0,-256,"left","bottom");
 
 		var lowSidebarBackground = Crafty.e("UIOverlay, Color");
@@ -179,13 +186,13 @@ Crafty.c("HighlightedButton", {
 		this.outline.w = this._w;
 		this.outline.h = this._h;
 		this.outline.color('rgb(200,200,255)');
-		this.outline.alpha = .01;
+		this.outline.alpha = .0;
 		this.attach(this.outline);
 		this.bind('MouseOver', function() {
 			this.outline.alpha = .33;
 		});
 		this.bind('MouseOut', function() {
-			this.outline.alpha = .01;
+			this.outline.alpha = .0;
 		});
 		this.bind('MouseDown', function() {
 			this.outline.alpha = .5;
@@ -195,6 +202,66 @@ Crafty.c("HighlightedButton", {
 	    });
 	}
 });
+
+Crafty.c("AnimationDetails", {
+	init: function() {
+		this.requires('UIOverlay, Color, Keyboard');
+		this.w = 196;
+		this.h = 208;
+		this.color('rgba(50,50,255)');
+		this.setCenteredPos(-452,-248,"right","bottom");
+		this.visible = false;
+		this.animationID = AnimationEditor.getID();
+
+		this.nameBox = Crafty.e("UIOverlay, InputField");
+		this.nameBox.w = 130;
+		this.nameBox.name = "animation" + this.animationID;
+		this.nameBox.parent = this;
+
+		this.nameLabel = Crafty.e("AltText");
+		this.nameLabel.setText("Name");
+
+		this.one("EnterFrame", function() {
+			this.nameLabel.relativeCenter(this,6,12);
+			this.nameBox.relativeCenter(this,58,8);
+		});
+		this.bind('FieldSaved', function() {
+			this.parent.setText(AnimationEditor["animation"+this.animationID]);
+			this.parent.text.textColor(AnimationEditor.Text.altColor);
+		})
+
+		this.frames = [];
+	},
+
+	show: function() {
+		for (var i = 0; i < this.frames.length; i++){
+			this.frames[i].visible = true;
+		}
+		this.nameBox.visible = true;
+		if (this.nameBox.label) {
+			this.nameBox.label.visible = true;
+		}
+		this.nameLabel.visible = true;
+		this.visible = true;
+	},
+
+	hide: function() {
+		for (var i = 0; i < this.frames.length; i++){
+			this.frames[i].visible = false;
+		}
+		this.nameBox.trigger("UploadPrep");
+		this.nameBox.visible = false;
+		if (this.nameBox.label) {
+			this.nameBox.label.visible = false;
+		}
+		this.nameLabel.visible = false;
+		this.visible = false;
+	},
+
+	addFrame: function() {
+
+	}
+})
 
 Crafty.c("AnimationController", {
 	init: function(){
@@ -210,6 +277,8 @@ Crafty.c("AnimationController", {
 			}
 		});
 		this.text = Crafty.e("UIOverlay, SmallDefText");
+		this.animationDetails = Crafty.e("AnimationDetails");
+		this.animationDetails.parent = this;
 	},
 
 	setColor: function(color) {
@@ -223,14 +292,26 @@ Crafty.c("AnimationController", {
 			AnimationEditor.animations[AnimationEditor.curAni].hideAnimation();
 		}
 		AnimationEditor.curAni = this.index;
+		this.animationDetails.show();
+		this.text.textColor(AnimationEditor.Text.altColor);
 		this.selected = true;
+		if (this.w === 240) {
+			this.w = 248;
+			this.x -= 8;
+		}
 	},
 
 	hideAnimation: function() {
+		if (this.w === 248) {
+			this.w = 240;
+			this.x += 8;
+		}
 		this.color(this.colorVal);
 		if (AnimationEditor.curAni === this.index) {
 			AnimationEditor.curAni = -1;
 		}
+		this.text.textColor(AnimationEditor.Text.defaultColor);
+		this.animationDetails.hide();
 		this.selected = false;
 	},
 
@@ -261,6 +342,9 @@ Crafty.c("AddAnimationButton", {
 		this.h = 32;
 		this.w = 32;
 		this.bind("Click", function() {
+			if (AnimationEditor.animations.length === 13) {
+				return;
+			}
 			if (AnimationEditor.curAni !== -1) {
 				AnimationEditor.animations[AnimationEditor.curAni].hideAnimation();
 			}
@@ -276,7 +360,6 @@ Crafty.c("AddAnimationButton", {
 			controller.setText("animation " + AnimationEditor.curAni);
 			AnimationEditor.animations.push(controller);
 			controller.showAnimation();
-
 		});
 	}
 });

@@ -24,7 +24,9 @@ Crafty.c('InputField', {
 	},
 
 	_saveField: function (force) {
-		if (this.isDown("ENTER") || force){
+		if (document.getElementById(this.name) &&
+			document.getElementById(this.name).focus &&
+			this.isDown("ENTER") || force){
             this.unbind('KeyDown', this._saveField)
 			AnimationEditor[this.name] = document.getElementById(this.name).value;
             this.textbox.destroy();
@@ -33,6 +35,9 @@ Crafty.c('InputField', {
                 this.label.destroy();
             }
             this.drawText(AnimationEditor[this.name]);
+			if (this.parent) {
+				this.parent.trigger("FieldSaved");
+			}
         }
 	},
 
