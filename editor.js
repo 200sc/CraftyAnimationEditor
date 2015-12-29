@@ -1,9 +1,9 @@
 AnimationEditor = {
     
+	curAni: -1,
+
     animations: [],
-    
-    currentSprite: null,
-    
+
     start: function() {
         Crafty.init();
         Crafty.background('rgb(50,50,50)');
@@ -63,8 +63,9 @@ Crafty.defineScene("AnimationEditor", function(){
             xside: "right",
             yside: "top"
         };
+		AnimationEditor.fileUp = fileUp;
         
-        var filename = Crafty.e("InputField, UIOverlay");
+        var filename = Crafty.e("UIOverlay, InputField");
         filename.setCenteredPos(fileUp.xoff,fileUp.yoff,fileUp.xside,fileUp.yside);
         filename.w = 200;
         filename.defaultText = "filename.png";
@@ -74,7 +75,7 @@ Crafty.defineScene("AnimationEditor", function(){
         filenameLabel.setCenteredPos(fileUp.xoff,fileUp.yoff-24,fileUp.xside,fileUp.yside);
         filenameLabel.setText("Filename");
         
-        var tileWidth = Crafty.e("InputField, UIOverlay");
+        var tileWidth = Crafty.e("UIOverlay, InputField");
         tileWidth.setCenteredPos(fileUp.xoff+70,fileUp.yoff+32,fileUp.xside,fileUp.yside);
         tileWidth.w = 50;
         tileWidth.defaultText = "32";
@@ -84,7 +85,7 @@ Crafty.defineScene("AnimationEditor", function(){
         widthLabel.setCenteredPos(fileUp.xoff,fileUp.yoff+40,fileUp.xside,fileUp.yside);
         widthLabel.setText("TileW");
         
-        var tileHeight = Crafty.e("InputField, UIOverlay");
+        var tileHeight = Crafty.e("UIOverlay, InputField");
         tileHeight.setCenteredPos(fileUp.xoff+70,fileUp.yoff+64,fileUp.xside,fileUp.yside);
         tileHeight.w = 50;
         tileHeight.defaultText = "32";
@@ -94,7 +95,7 @@ Crafty.defineScene("AnimationEditor", function(){
         heightLabel.setCenteredPos(fileUp.xoff,fileUp.yoff+72,fileUp.xside,fileUp.yside);
         heightLabel.setText("TileH");
         
-        var padding = Crafty.e('InputField, UIOverlay');
+        var padding = Crafty.e('UIOverlay, InputField');
         padding.setCenteredPos(fileUp.xoff+70,fileUp.yoff+96,fileUp.xside,fileUp.yside);
         padding.w = 50;
         padding.defaultText = "2";
@@ -111,7 +112,7 @@ Crafty.defineScene("AnimationEditor", function(){
         uploadLabel.setCenteredPos(fileUp.xoff+74,fileUp.yoff+168,fileUp.xside,fileUp.yside);
         uploadLabel.setText("Upload");
         
-        var save_ico = Crafty.e("UIOverlay, __spr_floppy");
+        var save_ico = Crafty.e("DownloadButton");
         save_ico.setCenteredPos(fileUp.xoff+10, fileUp.yoff+202,fileUp.xside,fileUp.yside);
         
         var downloadLabel = Crafty.e("AltText");
@@ -121,10 +122,29 @@ Crafty.defineScene("AnimationEditor", function(){
         // End File Upload UI
         /////////
 
+		var animationTab = Crafty.e("UIOverlay, Color");
+		animationTab.w = 128;
+		animationTab.h = 32;
+		animationTab.color("rgba(90,60,90,.75)");
+		animationTab.setCenteredPos(-256,-288,"right","bottom");
+
+		var animationLabel = Crafty.e("UIOverlay, DefText");
+		animationLabel.setCenteredPos(-248,-280,"right","bottom");
+		animationLabel.setText("Animations");
+
+		var animationBackground = Crafty.e("UIOverlay, Color");
+		animationBackground.w = AnimationEditor.width();
+		animationBackground.h = 256;
+		animationBackground.bind('ViewportResize', function() {
+            this.w = AnimationEditor.width();
+        });
+		animationBackground.color("rgba(100,60,60,.5)");
+		animationBackground.setCenteredPos(0,-256,"left","bottom");
+
 		var lowSidebarBackground = Crafty.e("UIOverlay, Color");
         lowSidebarBackground.w = 256;
         lowSidebarBackground.h = 256;
-        lowSidebarBackground.color("rgb(120,120,120)");
+        lowSidebarBackground.color("rgb(90,60,90)");
         lowSidebarBackground.setCenteredPos(-256,-256,"right","bottom");
         
 		var splitterBar = Crafty.e("UIOverlay, Color");
@@ -133,20 +153,84 @@ Crafty.defineScene("AnimationEditor", function(){
             this.w = AnimationEditor.width();
         });
         splitterBar.h = 8;
-        splitterBar.color("rgb(120,100,120)");
+        splitterBar.color("rgb(90,60,90)");
         splitterBar.setCenteredPos(0,-256,"left","bottom");
         
-        var delete_ico = Crafty.e("UIOverlay, __spr_cross");
-        var add_ico = Crafty.e("UIOverlay, __spr_check");
+        var delete_ico = Crafty.e("DeleteAnimationButton");
+        var add_ico = Crafty.e("AddAnimationButton");
         delete_ico.setCenteredPos(-128,-64,"right","bottom");
         add_ico.setCenteredPos(-64,-64,"right","bottom");
         
     });
 });
 
+Crafty.c("HighlightedButton", {
+	init: function() {
+		this.requires('2D, Canvas, Mouse');
+		this.outline = Crafty.e('2D, Canvas, Color');
+		if (this.has("UI")) {
+			this.outline.requires('UI');
+		}
+		this.outline.w = this._w;
+		this.outline.h = this._h;
+		this.outline.color('rgb(200,200,255)');
+		this.outline.alpha = .01;
+		this.attach(this.outline);
+		this.bind('MouseOver', function() {
+			this.outline.alpha = .33;
+		});
+		this.bind('MouseOut', function() {
+			this.outline.alpha = .01;
+		});
+		this.bind('MouseDown', function() {
+			this.outline.alpha = .5;
+		});
+		this.bind('MouseUp', function() {
+			this.outline.alpha = .33;
+	    });
+	}
+});
+
+Crafty.c("AnimationController", {
+	init: function(){
+		this.requires("UIOverlay, HighlightedButton, Color");
+		this.w = 240;
+		this.h = 16;
+	}
+})
+
+Crafty.c("AddAnimationButton", {
+	init: function() {
+		this.requires("UIOverlay, HighlightedButton, __spr_check");
+		this.bind("Click", function() {
+			AnimationEditor.curAni = AnimationEditor.animations.length;
+			var controller = Crafty.e("AnimationController");
+			controller.setCenteredPos(-248,-248+AnimationEditor.curAni*16,"right","bottom");
+			if (AnimationEditor.curAni % 2 == 0) {
+				controller.color("rgb(160,100,160)");
+			} else {
+				controller.color("rgb(140,100,100)");
+			}
+			AnimationEditor.animations.push(controller);
+		});
+	}
+});
+
+Crafty.c("DeleteAnimationButton", {
+	init: function() {
+		this.requires("UIOverlay, HighlightedButton, __spr_cross");
+	}
+});
+
+Crafty.c("DownloadButton", {
+	init: function() {
+		this.requires("UIOverlay, HighlightedButton, __spr_floppy");
+	}
+});
+
 Crafty.c("UploadButton", {
     init: function() {
-        this.requires("UIOverlay, __spr_arrow, Mouse");
+        this.requires("UIOverlay, HighlightedButton, __spr_arrow");
         this.bind("Click", function() {
             Crafty.trigger("UploadPrep");
             if (AnimationEditor.filename && AnimationEditor.tileWidth &&
@@ -173,6 +257,8 @@ Crafty.c("UploadButton", {
                             e.x = (x*AnimationEditor.tileWidth) + 32;
                             e.y = (y*AnimationEditor.tileHeight) + 32;
                             e.sprite(x,y);
+							e.spritex = x;
+							e.spritey = y;
                         }
                     }
                     AnimationEditor.spriteString = spriteString;
@@ -182,29 +268,19 @@ Crafty.c("UploadButton", {
     }
 });
 
+Crafty.c("Animation", {
+	init: function() {
+
+	}
+});
+
 Crafty.c("AnimationFrame", {
 	init: function() {
-		this.requires('2D, Canvas, __spr_sheet, Mouse');
-		this.outline = Crafty.e('2D, Canvas, Color');
-		this.outline.w = this._w;
-		this.outline.h = this._h;
-		this.outline.color('rgb(255,255,255)');
-		this.outline.alpha = .01;
-		this.attach(this.outline);
-		this.bind('MouseOver', function() {
-			this.outline.alpha = .33;
-		});
-		this.bind('MouseOut', function() {
-			this.outline.alpha = .01;
-		});
-		this.bind('MouseDown', function() {
-			this.outline.alpha = .5;
-		});
-		this.bind('MouseUp', function() {
-			this.outline.alpha = .33;
-	    });
+		this.requires('HighlightedButton, __spr_sheet');
 		this.bind('Click', function() {
-
+			if (AnimationEditor.curAni !== -1) {
+				AnimationEditor.animations[AnimationEditor.curAni].addFrame(this.spritex,this.spritey);
+			}
 		})
 	}
 });
@@ -358,7 +434,7 @@ Crafty.c('UIOverlay', {
 
 Crafty.c('InputField', {
 	init: function () {
-		this.requires('2D, Canvas, Keyboard, Mouse, Color');
+		this.requires('HighlightedButton, Keyboard, Color');
         this.color("rgb(255,255,255)");
         this.h = 30;
         this.name = "default";
