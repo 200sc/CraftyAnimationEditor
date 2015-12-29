@@ -310,6 +310,9 @@ Crafty.c("AnimationDetails", {
 			this.FPSBox.label.visible = boolean;
 		}
 		this.FPSLabel.visible = boolean;
+		if (this.animationTarget) {
+			this.animationTarget.visible = boolean;
+		}
 		this.visible = boolean;
 	},
 
@@ -377,14 +380,14 @@ Crafty.c("AnimationController", {
 		this.selected = true;
 		if (this.w === 240) {
 			this.w = 248;
-			this.x = 1664;
+			this.x = AnimationEditor.width()-256;
 		}
 	},
 
 	hideAnimation: function() {
 		if (this.w === 248) {
 			this.w = 240;
-			this.x = 1672;
+			this.x = AnimationEditor.width()-248;
 		}
 		this.color(this.colorVal);
 		if (AnimationEditor.curAni === this.index) {
