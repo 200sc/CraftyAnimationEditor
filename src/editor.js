@@ -247,6 +247,8 @@ Crafty.c("AnimationDetails", {
 		this.FPSLabel = Crafty.e("AltText");
 		this.FPSLabel.setText("FPS");
 
+		this.animationTarget = null;
+
 		this.one("EnterFrame", function() {
 			this.nameLabel.relativeCenter(this,6,12);
 			this.nameBox.relativeCenter(this,58,8);
@@ -260,7 +262,10 @@ Crafty.c("AnimationDetails", {
 				this.parent.setText(AnimationEditor["animation"+this.animationID]);
 				this.parent.text.textColor(AnimationEditor.Text.altColor);
 			} else if (data === this.FPSBox.name) {
-
+				this.FPS = AnimationEditor["fps"+this.animationID];
+				if (this.frames.length !== 0) {
+					this.beginAnimation();
+				}
 			} else if (data === this.frameCountBox.name) {
 				if (AnimationEditor.spriteString){
 					while (this.frames.length < AnimationEditor["frameCount" + this.animationID]) {
@@ -268,7 +273,22 @@ Crafty.c("AnimationDetails", {
 					}
 				}
 			}
-		})
+		});
+	},
+
+	beginAnimation: function(){
+		if (this.animationTarget) {
+			this.animationTarget.destroy();
+		}
+		reelframes = [];
+		for (var i = 0; i < this.frames.length; i++) {
+			reelframes.push([this.frames[i].spritex,this.frames[i].spritey])
+		}
+		console.log(reelframes);
+		this.animationTarget = Crafty.e("UIOverlay, __spr_sheet, SpriteAnimation");
+		this.animationTarget.relativeCenter(this,6,70);
+		this.animationTarget.reel("animation", (1/(this.FPS / this.frames.length))*1000, reelframes);
+		this.animationTarget.animate('animation', -1);
 	},
 
 	setVisible: function(boolean) {
