@@ -311,7 +311,13 @@ Crafty.c("AnimationDetails", {
 		frame.sprite(x,y);
 		frame.setCenteredPos(this.frames.length*AnimationEditor.tileWidth,
 							 -248,"left","bottom");
+		frame.listpos = this.frames.length;
+		frame.parent = this;
 		this.frames.push(frame);
+		this.updateFrameCount();
+	},
+
+	updateFrameCount: function() {
 		this.frameCountBox.drawText(String(this.frames.length));
 		this.frameCountBox.defaultText = String(this.frames.length);
 	}
@@ -381,21 +387,57 @@ Crafty.c("AnimationController", {
 
 Crafty.c("SpriteFrame", {
 	init: function() {
-		this.requires('HighlightedButton, __spr_sheet, Collision, Dragable');
-		this.bind('Click', function() {
-			if (AnimationEditor.curAni !== -1) {
-				AnimationEditor.animations[AnimationEditor.curAni].addFrame(this.spritex,this.spritey);
+		this.requires('HighlightedButton, __spr_sheet, Collision, Draggable');
+		this.bind("StartDrag", function() {
+			this.initialx = this.x;
+			this.initialy = this.y;
+		});
+		this.bind("StopDrag", function() {
+			collisions = this.hit("AnimationFrame");
+			if (collisions) {
+				hitFrame = collisions[0].obj;
+				hitFrame.setSprite(this.spritex,this.spritey);
+			}
+			this.y = this.initialy;
+			this.x = this.initialx;
+		});
+		this.bind('MouseUp', function(e) {
+			if (e.mouseButton === Crafty.mouseButtons.RIGHT) {
+				if (AnimationEditor.curAni !== -1) {
+					AnimationEditor.animations[AnimationEditor.curAni].addFrame(this.spritex,this.spritey);
+				}
 			}
 		})
+	},
+
+	setSprite: function(x,y){
+		this.spritex = x;
+		this.spritey = y;
+		this.sprite(x,y);
 	}
 });
 
 Crafty.c("AnimationFrame", {
 	init: function() {
 		this.requires('UIOverlay, HighlightedButton, __spr_sheet, Collision');
-		this.bind('Click', function() {
-			///?????
+		this.bind('MouseUp', function(e) {
+			if (e.mouseButton === Crafty.mouseButtons.RIGHT) {
+				for (var i = this.listpos+1; i < this.parent.frames.length; i++) {
+					this.parent.frames[i-1] = this.parent.frames[i];
+					this.parent.frames[i-1].x -= AnimationEditor.tileWidth;
+					this.parent.frames[i-1].listpos--;
+				}
+				this.parent.frames.pop();
+				this.parent.updateFrameCount();
+				this.destroy();
+			}
 		})
+	},
+
+	setSprite: function(x,y){
+		this.spritex = x;
+		this.spritey = y;
+		this.sprite(x,y);
 	}
 });
 
