@@ -31,17 +31,17 @@ Crafty.c('InputField', {
 			AnimationEditor[this.name] = document.getElementById(this.name).value;
             this.textbox.destroy();
 			this.textbox = null;
-            if (this.label) {
-                this.label.destroy();
-            }
             this.drawText(AnimationEditor[this.name]);
 			if (this.parent) {
-				this.parent.trigger("FieldSaved");
+				this.parent.trigger("FieldSaved", this.name);
 			}
         }
 	},
 
     drawText: function (text, offsetx, offsety) {
+		if (this.label) {
+			this.label.destroy();
+		}
 		if (!offsetx){
 			offsetx = 0;
 		}

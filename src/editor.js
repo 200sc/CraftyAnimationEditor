@@ -79,7 +79,7 @@ Crafty.defineScene("AnimationEditor", function(){
 
         var filename = Crafty.e("UIOverlay, InputField");
         filename.setCenteredPos(fileUp.xoff,fileUp.yoff,fileUp.xside,fileUp.yside);
-        filename.w = 200;
+        filename.w = 230;
         filename.defaultText = "filename.png";
         filename.name = "filename";
 
@@ -187,12 +187,13 @@ Crafty.c("HighlightedButton", {
 		this.outline.h = this._h;
 		this.outline.color('rgb(200,200,255)');
 		this.outline.alpha = .0;
+		this.defAlpha = .0;
 		this.attach(this.outline);
 		this.bind('MouseOver', function() {
 			this.outline.alpha = .33;
 		});
 		this.bind('MouseOut', function() {
-			this.outline.alpha = .0;
+			this.outline.alpha = this.defAlpha;
 		});
 		this.bind('MouseDown', function() {
 			this.outline.alpha = .5;
@@ -200,6 +201,10 @@ Crafty.c("HighlightedButton", {
 		this.bind('MouseUp', function() {
 			this.outline.alpha = .33;
 	    });
+	},
+
+	setDefaultTransparency: function(alpha) {
+		this.defAlpha = alpha;
 	}
 });
 
@@ -208,7 +213,7 @@ Crafty.c("AnimationDetails", {
 		this.requires('UIOverlay, Color, Keyboard');
 		this.w = 196;
 		this.h = 208;
-		this.color('rgba(50,50,255)');
+		this.color('rgb(255,50,50)');
 		this.setCenteredPos(-452,-248,"right","bottom");
 		this.visible = false;
 		this.animationID = AnimationEditor.getID();
@@ -217,49 +222,98 @@ Crafty.c("AnimationDetails", {
 		this.nameBox.w = 130;
 		this.nameBox.name = "animation" + this.animationID;
 		this.nameBox.parent = this;
+		this.nameBox.defaultText = "animation";
 
 		this.nameLabel = Crafty.e("AltText");
 		this.nameLabel.setText("Name");
 
+		this.frames = [];
+
+		this.frameCountBox = Crafty.e("UIOverlay, InputField");
+		this.frameCountBox.w = 32;
+		this.frameCountBox.name = 'frameCount' + this.animationID;
+		this.frameCountBox.parent = this;
+		this.frameCountBox.defaultText = "10";
+
+		this.frameLabel = Crafty.e("AltText");
+		this.frameLabel.setText("#Frames");
+
+		this.FPSBox = Crafty.e("UIOverlay, InputField");
+		this.FPSBox.w = 32;
+		this.FPSBox.name = 'fps' + this.animationID;
+		this.FPSBox.parent = this;
+		this.FPSBox.defaultText = "10";
+
+		this.FPSLabel = Crafty.e("AltText");
+		this.FPSLabel.setText("FPS");
+
 		this.one("EnterFrame", function() {
 			this.nameLabel.relativeCenter(this,6,12);
 			this.nameBox.relativeCenter(this,58,8);
+			this.frameCountBox.relativeCenter(this,82,40);
+			this.frameLabel.relativeCenter(this,6,44);
+			this.FPSBox.relativeCenter(this,156,40);
+			this.FPSLabel.relativeCenter(this,120,44);
 		});
-		this.bind('FieldSaved', function() {
-			this.parent.setText(AnimationEditor["animation"+this.animationID]);
-			this.parent.text.textColor(AnimationEditor.Text.altColor);
-		})
+		this.bind('FieldSaved', function(data) {
+			if (data === this.nameBox.name) {
+				this.parent.setText(AnimationEditor["animation"+this.animationID]);
+				this.parent.text.textColor(AnimationEditor.Text.altColor);
+			} else if (data === this.FPSBox.name) {
 
-		this.frames = [];
+			} else if (data === this.frameCountBox.name) {
+				if (AnimationEditor.spriteString){
+					while (this.frames.length < AnimationEditor["frameCount" + this.animationID]) {
+						this.addFrame(0,0);
+					}
+				}
+			}
+		})
+	},
+
+	setVisible: function(boolean) {
+		for (var i = 0; i < this.frames.length; i++){
+			this.frames[i].visible = boolean;
+		}
+		this.nameBox.visible = boolean;
+		if (this.nameBox.label) {
+			this.nameBox.label.visible = boolean;
+		}
+		this.nameLabel.visible = boolean;
+		this.frameCountBox.visible = boolean;
+		if (this.frameCountBox.label) {
+			this.frameCountBox.label.visible = boolean;
+		}
+		this.frameLabel.visible = boolean;
+		this.FPSBox.visible = boolean;
+		if (this.FPSBox.label) {
+			this.FPSBox.label.visible = boolean;
+		}
+		this.FPSLabel.visible = boolean;
+		this.visible = boolean;
 	},
 
 	show: function() {
-		for (var i = 0; i < this.frames.length; i++){
-			this.frames[i].visible = true;
-		}
-		this.nameBox.visible = true;
-		if (this.nameBox.label) {
-			this.nameBox.label.visible = true;
-		}
-		this.nameLabel.visible = true;
-		this.visible = true;
+		this.setVisible(true);
 	},
 
 	hide: function() {
-		for (var i = 0; i < this.frames.length; i++){
-			this.frames[i].visible = false;
-		}
 		this.nameBox.trigger("UploadPrep");
-		this.nameBox.visible = false;
-		if (this.nameBox.label) {
-			this.nameBox.label.visible = false;
-		}
-		this.nameLabel.visible = false;
-		this.visible = false;
+		this.FPSBox.trigger("UploadPrep");
+		this.frameCountBox.trigger("UploadPrep");
+		this.setVisible(false);
 	},
 
-	addFrame: function() {
-
+	addFrame: function(x,y) {
+		frame = Crafty.e("AnimationFrame");
+		frame.spritex = x;
+		frame.spritey = y;
+		frame.sprite(x,y);
+		frame.setCenteredPos(this.frames.length*AnimationEditor.tileWidth,
+							 -248,"left","bottom");
+		this.frames.push(frame);
+		this.frameCountBox.drawText(String(this.frames.length));
+		this.frameCountBox.defaultText = String(this.frames.length);
 	}
 })
 
@@ -287,7 +341,7 @@ Crafty.c("AnimationController", {
 	},
 
 	showAnimation: function() {
-		this.color("rgb(50,50,255)");
+		this.color("rgb(255,50,50)");
 		if (AnimationEditor.curAni !== this.index && AnimationEditor.curAni !== -1) {
 			AnimationEditor.animations[AnimationEditor.curAni].hideAnimation();
 		}
@@ -297,14 +351,14 @@ Crafty.c("AnimationController", {
 		this.selected = true;
 		if (this.w === 240) {
 			this.w = 248;
-			this.x -= 8;
+			this.x = 1664;
 		}
 	},
 
 	hideAnimation: function() {
 		if (this.w === 248) {
 			this.w = 240;
-			this.x += 8;
+			this.x = 1672;
 		}
 		this.color(this.colorVal);
 		if (AnimationEditor.curAni === this.index) {
@@ -316,7 +370,7 @@ Crafty.c("AnimationController", {
 	},
 
 	addFrame: function(x,y) {
-
+		this.animationDetails.addFrame(x,y);
 	},
 
 	setText: function(input) {
@@ -325,9 +379,9 @@ Crafty.c("AnimationController", {
 	}
 });
 
-Crafty.c("AnimationFrame", {
+Crafty.c("SpriteFrame", {
 	init: function() {
-		this.requires('HighlightedButton, __spr_sheet');
+		this.requires('HighlightedButton, __spr_sheet, Collision, Dragable');
 		this.bind('Click', function() {
 			if (AnimationEditor.curAni !== -1) {
 				AnimationEditor.animations[AnimationEditor.curAni].addFrame(this.spritex,this.spritey);
@@ -335,6 +389,16 @@ Crafty.c("AnimationFrame", {
 		})
 	}
 });
+
+Crafty.c("AnimationFrame", {
+	init: function() {
+		this.requires('UIOverlay, HighlightedButton, __spr_sheet, Collision');
+		this.bind('Click', function() {
+			///?????
+		})
+	}
+});
+
 
 Crafty.c("AddAnimationButton", {
 	init: function() {
@@ -398,7 +462,7 @@ Crafty.c("UploadButton", {
                 Crafty.load(spriteString, function() {
                     for (var x = 0; x < 32; x++) {
                         for (var y = 0; y < 32; y++) {
-                            var e = Crafty.e("AnimationFrame");
+                            var e = Crafty.e("SpriteFrame");
 							if (e.img.height <= (y+1)*AnimationEditor.tileHeight ||
 							    e.img.width <= (x+1)*AnimationEditor.tileWidth) {
 								e.destroy();
@@ -451,5 +515,44 @@ Crafty.c("SmallDefText", {
 		this.text(input);
 		this.textColor(AnimationEditor.Text.defaultColor);
 		this.textFont(AnimationEditor.Text.smallStyle);
+	}
+});
+
+Crafty.c("RectangleBorder", {
+	init: function() {
+		this.requires('2D');
+		this.top = Crafty.e("2D, Canvas");
+		this.right = Crafty.e("2D, Canvas");
+		this.left = Crafty.e("2D, Canvas");
+		this.bottom = Crafty.e("2D, Canvas");
+		this.attach(this.top);
+		this.attach(this.right);
+		this.attach(this.bottom);
+		this.attach(this.left);
+		this.sides = [this.top,this.bottom,this.left,this.right];
+	},
+
+	setup: function(requirements,w,h,thickness) {
+		this.requires(requirements);
+		this.top.w = w;
+		this.top.h = thickness;
+
+		this.bottom.h = thickness;
+		this.bottom.w = w;
+		this.bottom.y = h - thickness;
+
+		this.right.w = thickness;
+		this.right.h = h;
+		this.right.x = w - thickness;
+
+		this.left.w = thickness;
+		this.left.h = h;
+	},
+
+	color: function(color){
+		for (var i = 0; i < this.sides.length; i++) {
+			this.sides[i].requires("Color");
+			this.sides[i].color(color);
+		}
 	}
 });
