@@ -28,7 +28,8 @@ AnimationEditor = {
     Text: {
 		defaultColor: 'black',
         altColor: 'white',
-		defaultStyle: {family: 'Verdana', size: '16px'}
+		defaultStyle: {family: 'Verdana', size: '16px'},
+		smallStyle: {family: 'Verdana', size: '10px'}
 	}
 
 };
@@ -64,6 +65,10 @@ Crafty.defineScene("AnimationEditor", function(){
             yside: "top"
         };
 		AnimationEditor.fileUp = fileUp;
+
+		var uploadLabel = Crafty.e("UIOverlay, AltText");
+		uploadLabel.setCenteredPos(fileUp.xoff,fileUp.yoff-64,fileUp.xside,fileUp.yside);
+		uploadLabel.setText("Sprite Sheet Upload");
 
         var filename = Crafty.e("UIOverlay, InputField");
         filename.setCenteredPos(fileUp.xoff,fileUp.yoff,fileUp.xside,fileUp.yside);
@@ -158,8 +163,8 @@ Crafty.defineScene("AnimationEditor", function(){
 
         var delete_ico = Crafty.e("DeleteAnimationButton");
         var add_ico = Crafty.e("AddAnimationButton");
-        delete_ico.setCenteredPos(-128,-64,"right","bottom");
-        add_ico.setCenteredPos(-64,-64,"right","bottom");
+        delete_ico.setCenteredPos(-96,-36,"right","bottom");
+        add_ico.setCenteredPos(-50,-36,"right","bottom");
 
     });
 });
@@ -196,22 +201,82 @@ Crafty.c("AnimationController", {
 		this.requires("UIOverlay, HighlightedButton, Color");
 		this.w = 240;
 		this.h = 16;
+		this.bind("Click", function() {
+			this.selected = !this.selected;
+			if (this.selected) {
+				this.showAnimation();
+			} else {
+				this.hideAnimation();
+			}
+		});
+		this.text = Crafty.e("UIOverlay, SmallDefText");
+	},
+
+	setColor: function(color) {
+		this.color(color);
+		this.colorVal = color;
+	},
+
+	showAnimation: function() {
+		this.color("rgb(50,50,255)");
+		if (AnimationEditor.curAni !== this.index && AnimationEditor.curAni !== -1) {
+			AnimationEditor.animations[AnimationEditor.curAni].hideAnimation();
+		}
+		AnimationEditor.curAni = this.index;
+		this.selected = true;
+	},
+
+	hideAnimation: function() {
+		this.color(this.colorVal);
+		if (AnimationEditor.curAni === this.index) {
+			AnimationEditor.curAni = -1;
+		}
+		this.selected = false;
+	},
+
+	addFrame: function(x,y) {
+
+	},
+
+	setText: function(input) {
+		this.text.relativeCenter(this,2,2);
+		this.text.setText(input);
 	}
-})
+});
+
+Crafty.c("AnimationFrame", {
+	init: function() {
+		this.requires('HighlightedButton, __spr_sheet');
+		this.bind('Click', function() {
+			if (AnimationEditor.curAni !== -1) {
+				AnimationEditor.animations[AnimationEditor.curAni].addFrame(this.spritex,this.spritey);
+			}
+		})
+	}
+});
 
 Crafty.c("AddAnimationButton", {
 	init: function() {
 		this.requires("UIOverlay, HighlightedButton, __spr_check");
+		this.h = 32;
+		this.w = 32;
 		this.bind("Click", function() {
+			if (AnimationEditor.curAni !== -1) {
+				AnimationEditor.animations[AnimationEditor.curAni].hideAnimation();
+			}
 			AnimationEditor.curAni = AnimationEditor.animations.length;
 			var controller = Crafty.e("AnimationController");
+			controller.index = AnimationEditor.curAni;
 			controller.setCenteredPos(-248,-248+AnimationEditor.curAni*16,"right","bottom");
 			if (AnimationEditor.curAni % 2 == 0) {
-				controller.color("rgb(160,100,160)");
+				controller.setColor("rgb(160,100,160)");
 			} else {
-				controller.color("rgb(140,100,100)");
+				controller.setColor("rgb(100,100,140)");
 			}
+			controller.setText("animation " + AnimationEditor.curAni);
 			AnimationEditor.animations.push(controller);
+			controller.showAnimation();
+
 		});
 	}
 });
@@ -219,6 +284,8 @@ Crafty.c("AddAnimationButton", {
 Crafty.c("DeleteAnimationButton", {
 	init: function() {
 		this.requires("UIOverlay, HighlightedButton, __spr_cross");
+		this.h = 32;
+		this.w = 32;
 	}
 });
 
@@ -268,23 +335,6 @@ Crafty.c("UploadButton", {
     }
 });
 
-Crafty.c("Animation", {
-	init: function() {
-
-	}
-});
-
-Crafty.c("AnimationFrame", {
-	init: function() {
-		this.requires('HighlightedButton, __spr_sheet');
-		this.bind('Click', function() {
-			if (AnimationEditor.curAni !== -1) {
-				AnimationEditor.animations[AnimationEditor.curAni].addFrame(this.spritex,this.spritey);
-			}
-		})
-	}
-});
-
 Crafty.c("AltText", {
     init: function () {
         this.requires("UIOverlay, Text");
@@ -306,5 +356,17 @@ Crafty.c("DefText", {
 		this.text(input);
 		this.textColor(AnimationEditor.Text.defaultColor);
 		this.textFont(AnimationEditor.Text.defaultStyle);
+	}
+});
+
+Crafty.c("SmallDefText", {
+	init: function () {
+		this.requires("UIOverlay, Text");
+	},
+
+	setText: function(input) {
+		this.text(input);
+		this.textColor(AnimationEditor.Text.defaultColor);
+		this.textFont(AnimationEditor.Text.smallStyle);
 	}
 });
