@@ -133,7 +133,26 @@ Crafty.c("AnimationDetails", {
 	updateFrameCount: function() {
 		this.frameCountBox.drawText(String(this.frames.length));
 		this.frameCountBox.defaultText = String(this.frames.length);
-	}
+	},
+
+    reset: function() {
+        this.nameBox.destroy();
+		if (this.nameBox.label) {
+			this.nameBox.label.destroy();
+		}
+		this.nameLabel.destroy();
+		this.frameCountBox.destroy();
+		if (this.frameCountBox.label) {
+			this.frameCountBox.label.destroy();
+		}
+		this.frameLabel.destroy();
+		this.FPSBox.destroy();
+		if (this.FPSBox.label) {
+			this.FPSBox.label.destroy();
+		}
+		this.FPSLabel.destroy();
+		this.destroy();
+    }
 })
 
 Crafty.c("AnimationController", {
@@ -195,5 +214,11 @@ Crafty.c("AnimationController", {
 	setText: function(input) {
 		this.text.relativeCenter(this,2,2);
 		this.text.setText(input);
-	}
+	},
+
+    reset: function() {
+        this.text.destroy();
+        this.animationDetails.reset();
+        this.destroy();
+    }
 });
