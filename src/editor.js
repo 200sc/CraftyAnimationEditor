@@ -377,6 +377,9 @@ Crafty.c("SpriteLabel", {
                 AnimationEditor["label"+this.ID] && AnimationEditor.labels) {
                 AnimationEditor.labels[AnimationEditor["y"+this.ID]][AnimationEditor["x"+this.ID]] = AnimationEditor["label"+this.ID];
             }
+            this.label._globalZ = this._globalZ+1;
+            this.xBox.label._globalZ = this._globalZ+1;
+            this.yBox.label._globalZ = this._globalZ+1;
         });
     },
 

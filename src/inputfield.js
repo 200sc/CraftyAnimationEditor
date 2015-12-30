@@ -39,8 +39,8 @@ Crafty.c('InputField', {
 	},
 
     drawText: function (text, offsetx, offsety) {
-		if (this.label) {
-			this.label.destroy();
+		if (!this.label) {
+			this.label = Crafty.e('UIOverlay, Text');
 		}
 		if (!offsetx){
 			offsetx = 0;
@@ -48,7 +48,6 @@ Crafty.c('InputField', {
 		if (!offsety){
 			offsety = 0;
 		}
-		this.label = Crafty.e('UIOverlay, Text');
 		this.label.text(text);
 		this.label.textColor(AnimationEditor.Text.defaultColor);
 		this.label.textFont(AnimationEditor.Text.defaultStyle);

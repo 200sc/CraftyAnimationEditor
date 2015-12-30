@@ -121,10 +121,50 @@ Crafty.c("DownloadButton", {
         this.h = 32;
 		this.w = 32;
         this.bind("Click", function() {
-            if (AnimationEditor.labels[0][0]) {
+            if (AnimationEditor.labels && AnimationEditor.labels[0][0]) {
+                var hiddenElement = document.createElement('a');
+                // write the loadstring
+                spriteString = "{\"sprites\"\: {" +
+                    "\""+AnimationEditor.filename +"\"\: {" +
+                        "\"tile\"\: "+ AnimationEditor.tileWidth + "," +
+                        "\"tileh\"\: "+ AnimationEditor.tileHeight + "," +
+                        "\"map\"\: { \""+ AnimationEditor.labels[0][0]+"\"\: [0,0]}," +
+                        "\"paddingX\"\: "+ AnimationEditor.padding + "," +
+                        "\"paddingY\"\: "+ AnimationEditor.padding +
+                    "}"+
+                "}}";
+                // write the components
+                componentString = "Crafty.c(\""+AnimationEditor.labels[0][0].substring(4)+"\", {" + String.fromCharCode(13);
+                    componentString += "\tinit: function() {" + String.fromCharCode(13);
+                        componentString += "\t\tthis.loadString =" + spriteString + String.fromCharCode(13);
+                        componentString += "\t\tthis.requires(\""+AnimationEditor.labels[0][0]+"\");" + String.fromCharCode(13);
+                        for (var i = 0; i < AnimationEditor.animations.length; i++){
+                            a = AnimationEditor.animations[i].animationDetails;
+                            if (AnimationEditor["animation"+a.animationID]) {
+                                componentString += "\t\tthis.reel(\"";
+                                    componentString += AnimationEditor["animation"+a.animationID]+"\"," + String.fromCharCode(13);
+                                    componentString += "\t\t"+((1/(a.FPS/a.frames.length))*1000)+"," + String.fromCharCode(13);
+                                    componentString += "\t\t[";
+                                    for (var j = 0; j < a.frames.length; j++) {
+                                        if (j !== 0) {
+                                            componentString += ",";
+                                        }
+                                        f = a.frames[j];
+                                        componentString += "["+f.spritex+","+f.spritey+"]";
+                                    }
+                                    componentString += "]";
+                                componentString += ");" + String.fromCharCode(13);
+                            }
+                        }
+                    componentString += "\t}" + String.fromCharCode(13);
+                componentString += "});" + String.fromCharCode(13);
 
+                hiddenElement.href = "data:attachment/txt;charset=utf-8," + encodeURIComponent(componentString);
+                hiddenElement.target = '_blank';
+                hiddenElement.download = 'component.txt';
+                hiddenElement.click();
             }
-        })
+        });
 	}
 });
 
