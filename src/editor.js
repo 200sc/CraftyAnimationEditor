@@ -8,7 +8,7 @@ AnimationEditor = {
 
     start: function() {
         Crafty.init();
-        Crafty.background('rgb(50,50,50)');
+        Crafty.background('rgb(70,50,70)');
         Crafty.scene("AnimationEditor");
     },
 
@@ -62,7 +62,7 @@ Crafty.defineScene("AnimationEditor", function(){
         sidebarBackground.bind('ViewportResize', function() {
             this.h = AnimationEditor.height();
         });
-        sidebarBackground.color("rgb(100,100,100)");
+        sidebarBackground.color("rgb(120,100,120)");
         sidebarBackground.setCenteredPos(-256,0,"right","top");
 
         AnimationEditor.baseGlobalZ = sidebarBackground._globalZ;
@@ -191,7 +191,7 @@ Crafty.defineScene("AnimationEditor", function(){
 		animationBackground.bind('ViewportResize', function() {
             this.w = AnimationEditor.width();
         });
-		animationBackground.color("rgba(100,60,60,.75)");
+		animationBackground.color("rgba(60,20,60,.75)");
 		animationBackground.setCenteredPos(0,-256,"left","bottom");
         animationBackground._globalZ = 100;
 
