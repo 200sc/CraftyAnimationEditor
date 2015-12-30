@@ -176,13 +176,13 @@ Crafty.defineScene("AnimationEditor", function(){
         // Animation UI
 
 		var animationTab = Crafty.e("UIOverlay, Color");
-		animationTab.w = 128;
+		animationTab.w = 196;
 		animationTab.h = 32;
 		animationTab.color("rgba(90,60,90,.75)");
-		animationTab.setCenteredPos(-256,-288,"right","bottom");
+		animationTab.setCenteredPos(-248,-288,"right","bottom");
 
 		var animationLabel = Crafty.e("UIOverlay, DefText");
-		animationLabel.setCenteredPos(-248,-280,"right","bottom");
+		animationLabel.setCenteredPos(-240,-280,"right","bottom");
 		animationLabel.setText("Animations");
 
 		var animationBackground = Crafty.e("UIOverlay, Color");
@@ -201,11 +201,11 @@ Crafty.defineScene("AnimationEditor", function(){
         lowSidebarBackground.color("rgb(90,60,90)");
         lowSidebarBackground.setCenteredPos(-256,-256,"right","bottom");
 
-        var delete_ico = Crafty.e("DeleteAnimationButton");
-        delete_ico.setCenteredPos(-96,-36,"right","bottom");
+//        var delete_ico = Crafty.e("DeleteAnimationButton");
+//        delete_ico.setCenteredPos(-130,-286,"right","bottom");
 
         var add_ico = Crafty.e("AddAnimationButton");
-        add_ico.setCenteredPos(-50,-36,"right","bottom");
+        add_ico.setCenteredPos(-98,-286,"right","bottom");
 
 
         // End Animation UI
@@ -220,6 +220,11 @@ Crafty.defineScene("AnimationEditor", function(){
         splitterBar.h = 8;
         splitterBar.color("rgb(90,60,90)");
         splitterBar.setCenteredPos(0,-256,"left","bottom");
+
+        AnimationEditor.splitterBar = splitterBar;
+        AnimationEditor.animationBackground = animationBackground;
+        splitterBar.visible = false;
+        animationBackground.visible = false;
     });
 });
 

@@ -36,7 +36,7 @@ Crafty.c("AddAnimationButton", {
 		this.h = 32;
 		this.w = 32;
 		this.bind("Click", function() {
-			if (AnimationEditor.animations.length === 13) {
+			if (AnimationEditor.animations.length === 15) {
 				return;
 			}
 			if (AnimationEditor.curAni !== -1) {
@@ -120,6 +120,11 @@ Crafty.c("DownloadButton", {
 		this.requires("UIOverlay, HighlightedButton, __spr_floppy");
         this.h = 32;
 		this.w = 32;
+        this.bind("Click", function() {
+            if (AnimationEditor.labels[0][0]) {
+
+            }
+        })
 	}
 });
 

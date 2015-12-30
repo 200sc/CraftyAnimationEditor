@@ -2,7 +2,7 @@ Crafty.c("AnimationDetails", {
 	init: function() {
 		this.requires('UIOverlay, Color, Keyboard');
 		this.w = 196;
-		this.h = 208;
+		this.h = 248;
 		this.color('rgb(150,50,150)');
 		this.setCenteredPos(-452,-248,"right","bottom");
 		this.visible = false;
@@ -191,6 +191,8 @@ Crafty.c("AnimationController", {
 			this.w = 248;
 			this.x = AnimationEditor.width()-256;
 		}
+        AnimationEditor.animationBackground.visible = true;
+        AnimationEditor.splitterBar.visible = true;
 	},
 
 	hideAnimation: function() {
@@ -205,6 +207,8 @@ Crafty.c("AnimationController", {
 		this.text.textColor(AnimationEditor.Text.defaultColor);
 		this.animationDetails.hide();
 		this.selected = false;
+        AnimationEditor.animationBackground.visible = false;
+        AnimationEditor.splitterBar.visible = false;
 	},
 
 	addFrame: function(x,y) {
