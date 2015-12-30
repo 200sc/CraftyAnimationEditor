@@ -1,5 +1,5 @@
 # CraftyAnimationEditor
-This is a graphical editor for animations and sprites for CraftyJS. This will (eventually) output crafty component files and json strings as desired for uploaded sprite sheets.
+This is a graphical editor for animations and sprites for CraftyJS. This will output crafty component files and json strings as desired for uploaded sprite sheets and animation sets.
 
 Demo animation from first build:
 [https://imgur.com/ETbw0b5]
