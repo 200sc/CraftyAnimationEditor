@@ -55,6 +55,7 @@ Crafty.c('InputField', {
 		this.label.setCenteredPos(this.screenoffsetx + offsetx,
 								 this.screenoffsety + 5 + offsety,
 								 this.xBorder, this.yBorder);
+        this.label._globalZ = this._globalZ + 1;
 	}
 
 });

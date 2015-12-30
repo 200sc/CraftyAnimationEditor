@@ -366,29 +366,11 @@ Crafty.c("SpriteLabel", {
             this.yBox._globalZ = this._globalZ;
             this.yBoxLabel._globalZ = this._globalZ;
             this.outline.setGlobalZ(this._globalZ);
-            if (this.label) {
-                this.label._globalZ = this._globalZ+1;
-            }
-            if (this.xBox.label) {
-                this.xBox.label._globalZ = this._globalZ+1;
-            }
-            if (this.yBox.label) {
-                this.yBox.label._globalZ = this._globalZ+1;
-            }
         });
         this.bind("FieldSaved", function() {
             if (AnimationEditor["y"+this.ID] && AnimationEditor["x"+this.ID] &&
                 AnimationEditor["label"+this.ID] && AnimationEditor.labels) {
                 AnimationEditor.labels[AnimationEditor["y"+this.ID]][AnimationEditor["x"+this.ID]] = AnimationEditor["label"+this.ID];
-            }
-            if (this.label) {
-                this.label._globalZ = this._globalZ+1;
-            }
-            if (this.xBox.label) {
-                this.xBox.label._globalZ = this._globalZ+1;
-            }
-            if (this.yBox.label) {
-                this.yBox.label._globalZ = this._globalZ+1;
             }
         });
     },
