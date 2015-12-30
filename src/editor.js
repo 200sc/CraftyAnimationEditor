@@ -272,7 +272,7 @@ Crafty.c("SpriteFrame", {
         this.bind('MouseOver', function() {
             if (!this.dragging && AnimationEditor.labels &&
                 AnimationEditor.labels[this.spritey][this.spritex]) {
-                this.labelBackground = Crafty.e("2D, Color");
+                this.labelBackground = Crafty.e("2D, Canvas, Color");
                 this.labelBackground.x = this.x + this.w;
                 this.labelBackground.y = this.y;
                 this.labelBackground.h = 20;
