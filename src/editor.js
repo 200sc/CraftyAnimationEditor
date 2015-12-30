@@ -322,6 +322,7 @@ Crafty.c("AnimationFrame", {
     }
 });
 
+//TODO: Make sure input names are valid with spr_, or add spr_ to all things.
 Crafty.c("SpriteLabel", {
     init: function() {
         this.requires("UIOverlay, InputField");
@@ -359,39 +360,54 @@ Crafty.c("SpriteLabel", {
             this.yBoxLabel.relativeCenter(this,60,40);
             this.yBox.relativeCenter(this,80,32);
             this.outline.b_relativeCenter(this,-4,-4);
-            this.drawText("spr_name");
-            this.xBox.drawText("0");
-            this.yBox.drawText("0");
 
             this.xBox._globalZ = this._globalZ;
             this.xBoxLabel._globalZ = this._globalZ;
             this.yBox._globalZ = this._globalZ;
             this.yBoxLabel._globalZ = this._globalZ;
             this.outline.setGlobalZ(this._globalZ);
-            this.label._globalZ = this._globalZ+1;
-            this.xBox.label._globalZ = this._globalZ+1;
-            this.yBox.label._globalZ = this._globalZ+1;
+            if (this.label) {
+                this.label._globalZ = this._globalZ+1;
+            }
+            if (this.xBox.label) {
+                this.xBox.label._globalZ = this._globalZ+1;
+            }
+            if (this.yBox.label) {
+                this.yBox.label._globalZ = this._globalZ+1;
+            }
         });
         this.bind("FieldSaved", function() {
             if (AnimationEditor["y"+this.ID] && AnimationEditor["x"+this.ID] &&
                 AnimationEditor["label"+this.ID] && AnimationEditor.labels) {
                 AnimationEditor.labels[AnimationEditor["y"+this.ID]][AnimationEditor["x"+this.ID]] = AnimationEditor["label"+this.ID];
             }
-            this.label._globalZ = this._globalZ+1;
-            this.xBox.label._globalZ = this._globalZ+1;
-            this.yBox.label._globalZ = this._globalZ+1;
+            if (this.label) {
+                this.label._globalZ = this._globalZ+1;
+            }
+            if (this.xBox.label) {
+                this.xBox.label._globalZ = this._globalZ+1;
+            }
+            if (this.yBox.label) {
+                this.yBox.label._globalZ = this._globalZ+1;
+            }
         });
     },
 
     reset: function() {
         this.xBox.destroy();
-        this.xBox.label.destroy();
+        if (this.xBox.label) {
+            this.xBox.label.destroy();
+        }
         this.xBoxLabel.destroy();
         this.yBox.destroy();
-        this.yBox.label.destroy();
+        if (this.yBox.label) {
+            this.yBox.label.destroy();
+        }
         this.yBoxLabel.destroy();
         this.outline.destroy();
-        this.label.destroy();
+        if (this.label) {
+            this.label.destroy();
+        }
         this.destroy();
     }
 });

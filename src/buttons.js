@@ -127,17 +127,17 @@ Crafty.c("DownloadButton", {
                 spriteString = "{\"sprites\"\: {" +
                     "\""+AnimationEditor.filename +"\"\: {" +
                         "\"tile\"\: "+ AnimationEditor.tileWidth + "," +
-                        "\"tileh\"\: "+ AnimationEditor.tileHeight + "," +
+                        "\"tileh\"\: "+ AnimationEditor.tileHeight + "," +//TODO: Add all labels to the sprite map
                         "\"map\"\: { \""+ AnimationEditor.labels[0][0]+"\"\: [0,0]}," +
                         "\"paddingX\"\: "+ AnimationEditor.padding + "," +
                         "\"paddingY\"\: "+ AnimationEditor.padding +
                     "}"+
                 "}}";
-                // write the components
+                // write the component
                 componentString = "Crafty.c(\""+AnimationEditor.labels[0][0].substring(4)+"\", {" + String.fromCharCode(13);
                     componentString += "\tinit: function() {" + String.fromCharCode(13);
                         componentString += "\t\tthis.loadString =" + spriteString + String.fromCharCode(13);
-                        componentString += "\t\tthis.requires(\""+AnimationEditor.labels[0][0]+"\");" + String.fromCharCode(13);
+                        componentString += "\t\tthis.requires(\""+AnimationEditor.labels[0][0]+",SpriteAnimation"+"\");" + String.fromCharCode(13);
                         for (var i = 0; i < AnimationEditor.animations.length; i++){
                             a = AnimationEditor.animations[i].animationDetails;
                             if (AnimationEditor["animation"+a.animationID]) {
