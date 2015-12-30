@@ -143,8 +143,8 @@ Crafty.c("DownloadButton", {
                             if (AnimationEditor["animation"+a.animationID]) {
                                 componentString += "\t\tthis.reel(\"";
                                     componentString += AnimationEditor["animation"+a.animationID]+"\"," + String.fromCharCode(13);
-                                    componentString += "\t\t"+((1/(a.FPS/a.frames.length))*1000)+"," + String.fromCharCode(13);
-                                    componentString += "\t\t[";
+                                    componentString += "\t\t\t"+((1/(a.FPS/a.frames.length))*1000)+"," + String.fromCharCode(13);
+                                    componentString += "\t\t\t[";
                                     for (var j = 0; j < a.frames.length; j++) {
                                         if (j !== 0) {
                                             componentString += ",";
