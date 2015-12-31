@@ -10,7 +10,7 @@ Name a local file and it's sheet dimensions as expected by a Crafty.load call (p
 Hit upload, then add animations with the green plus.
 You can't delete animations yet.
 
-Hit the plus next to 'Labels' to add sprite labels, such as you'd require in a component to set its default sprite to that position. Right now you need a label pointing to [0][0] on the sprite sheet to save a file-- it bases the name of the component on that label's name (removing the first four characters, assuming 'spr_').
+Hit the plus next to 'Labels' to add sprite labels, such as you'd require in a component to set its default sprite to that position. Right now you need a label pointing to [0][0] on the sprite sheet to save a file-- it bases the name of the component on that label's name.
 
 Right click on frames in the sprite sheet to push them to the current frames in the animation.
 Right click on frames in the animation to remove them from the animation.
