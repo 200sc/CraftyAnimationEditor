@@ -1,5 +1,5 @@
 Crafty.c("AnimationDetails", {
-	init: function() {
+	init: function () {
 		this.requires('UIOverlay, Color, Keyboard');
 		this.w = 196;
 		this.h = 248;
@@ -42,7 +42,7 @@ Crafty.c("AnimationDetails", {
 
 		this.animationTarget = null;
 
-		this.one("EnterFrame", function() {
+		this.one("EnterFrame", function () {
 			this.nameLabel.relativeCenter(this,6,12);
 			this.nameBox.relativeCenter(this,58,8);
 			this.frameCountBox.relativeCenter(this,82,40);
@@ -50,7 +50,7 @@ Crafty.c("AnimationDetails", {
 			this.FPSBox.relativeCenter(this,156,40);
 			this.FPSLabel.relativeCenter(this,120,44);
 		});
-		this.bind('FieldSaved', function(data) {
+		this.bind('FieldSaved', function (data) {
 			if (data === this.nameBox.name) {
 				this.parent.setText(AnimationEditor["animation"+this.animationID]);
 				this.parent.text.textColor(Settings.Text.altColor);
@@ -60,7 +60,7 @@ Crafty.c("AnimationDetails", {
 					this.beginAnimation();
 				}
 			} else if (data === this.frameCountBox.name) {
-				if (AnimationEditor.spriteString){
+				if (AnimationEditor.spriteString) {
 					while (this.frames.length < AnimationEditor["frameCount" + this.animationID]) {
 						this.addFrame(0,0);
 					}
@@ -69,7 +69,7 @@ Crafty.c("AnimationDetails", {
 		});
 	},
 
-	beginAnimation: function(){
+	beginAnimation: function () {
 		if (this.animationTarget) {
 			this.animationTarget.destroy();
 		}
@@ -83,8 +83,8 @@ Crafty.c("AnimationDetails", {
 		this.animationTarget.animate('animation', -1);
 	},
 
-	setVisible: function(boolean) {
-		for (var i = 0; i < this.frames.length; i++){
+	setVisible: function (boolean) {
+		for (var i = 0; i < this.frames.length; i++) {
 			this.frames[i].visible = boolean;
 		}
 		this.nameBox.visible = boolean;
@@ -108,18 +108,18 @@ Crafty.c("AnimationDetails", {
 		this.visible = boolean;
 	},
 
-	show: function() {
+	show: function () {
 		this.setVisible(true);
 	},
 
-	hide: function() {
+	hide: function () {
 		this.nameBox.trigger("UploadPrep");
 		this.FPSBox.trigger("UploadPrep");
 		this.frameCountBox.trigger("UploadPrep");
 		this.setVisible(false);
 	},
 
-	addFrame: function(x,y) {
+	addFrame: function (x,y) {
 		frame = Crafty.e("AnimationFrame");
 		frame.spritex = x;
 		frame.spritey = y;
@@ -132,12 +132,12 @@ Crafty.c("AnimationDetails", {
 		this.updateFrameCount();
 	},
 
-	updateFrameCount: function() {
+	updateFrameCount: function () {
 		this.frameCountBox.drawText(String(this.frames.length));
 		this.frameCountBox.defaultText = String(this.frames.length);
 	},
 
-    reset: function() {
+    reset: function () {
         this.nameBox.destroy();
 		if (this.nameBox.label) {
 			this.nameBox.label.destroy();
@@ -158,11 +158,11 @@ Crafty.c("AnimationDetails", {
 })
 
 Crafty.c("AnimationController", {
-	init: function(){
+	init: function () {
 		this.requires("UIOverlay, HighlightedButton, Color");
 		this.w = 240;
 		this.h = 16;
-		this.bind("Click", function() {
+		this.bind("Click", function () {
 			this.selected = !this.selected;
 			if (this.selected) {
 				this.showAnimation();
@@ -175,12 +175,12 @@ Crafty.c("AnimationController", {
 		this.animationDetails.parent = this;
 	},
 
-	setColor: function(color) {
+	setColor: function (color) {
 		this.color(color);
 		this.colorVal = color;
 	},
 
-	showAnimation: function() {
+	showAnimation: function () {
 		this.color(Colors.anim);
 		if (AnimationEditor.curAni !== this.index && AnimationEditor.curAni !== -1) {
 			AnimationEditor.animations[AnimationEditor.curAni].hideAnimation();
@@ -197,7 +197,7 @@ Crafty.c("AnimationController", {
         AnimationEditor.splitterBar.visible = true;
 	},
 
-	hideAnimation: function() {
+	hideAnimation: function () {
 		if (this.w === 248) {
 			this.w = 240;
 			this.x = AnimationEditor.width()-248;
@@ -213,16 +213,16 @@ Crafty.c("AnimationController", {
         AnimationEditor.splitterBar.visible = false;
 	},
 
-	addFrame: function(x,y) {
+	addFrame: function (x,y) {
 		this.animationDetails.addFrame(x,y);
 	},
 
-	setText: function(input) {
+	setText: function (input) {
 		this.text.relativeCenter(this,2,2);
 		this.text.setText(input);
 	},
 
-    reset: function() {
+    reset: function () {
         this.text.destroy();
         this.animationDetails.reset();
         this.destroy();

@@ -1,4 +1,4 @@
-AnimationEditor = {
+var AnimationEditor = {
 
 	curAni: -1,
 
@@ -6,56 +6,56 @@ AnimationEditor = {
 
     labels: null,
 
-    start: function() {
+    start: function () {
         Crafty.init();
         Crafty.background(Colors.bg);
         Crafty.scene("AnimationEditor");
     },
 
-    _uiGlobalZ: Math.pow(2,16),
+    _uiGlobalZ: Math.pow(2, 16),
 
-    uiGlobalZ: function() {
+    uiGlobalZ: function () {
         this._uiGlobalZ += 10;
         return this._uiGlobalZ;
     },
 
 	_nextID: -1,
 
-	getID: function() {
+	getID: function () {
 		this._nextID++;
 		return this._nextID;
 	},
 
-    width: function() {
+    width: function () {
         return Crafty.viewport._width;
     },
 
-    height: function() {
+    height: function () {
         return Crafty.viewport._height;
     }
 };
 
-Crafty.defineScene("AnimationEditor", function(){
+Crafty.defineScene("AnimationEditor", function () {
     Crafty.load({
         "sprites": {
             "assets/icons.png": {
                 "tile": 64,
                 "tileh": 64,
-                "map": {"__spr_floppy": [0,0], "__spr_cross": [1,0], "__spr_check": [0,1], "__spr_arrow": [1,1]},
+                "map": {"__spr_floppy": [0, 0], "__spr_cross": [1, 0], "__spr_check": [0, 1], "__spr_arrow": [1, 1]},
                 "paddingX": 2,
                 "paddingY": 2
             }
         }
-    },function(){
+    }, function () {
 
         var sidebarBackground = Crafty.e("UIOverlay, Color");
         sidebarBackground.w = 256;
         sidebarBackground.h = AnimationEditor.height();
-        sidebarBackground.bind('ViewportResize', function() {
+        sidebarBackground.bind('ViewportResize', function () {
             this.h = AnimationEditor.height();
         });
         sidebarBackground.color(Colors.side);
-        sidebarBackground.setCenteredPos(-256,0,"right","top");
+        sidebarBackground.setCenteredPos(-256, 0, "right", "top");
 
         AnimationEditor.baseGlobalZ = sidebarBackground._globalZ;
 
@@ -184,7 +184,7 @@ Crafty.defineScene("AnimationEditor", function(){
 		var animationBackground = Crafty.e("UIOverlay, Color");
 		animationBackground.w = AnimationEditor.width();
 		animationBackground.h = 256;
-		animationBackground.bind('ViewportResize', function() {
+		animationBackground.bind('ViewportResize', function () {
             this.w = AnimationEditor.width();
         });
 		animationBackground.color(Colors.bot);
@@ -210,7 +210,7 @@ Crafty.defineScene("AnimationEditor", function(){
 
 		var splitterBar = Crafty.e("UIOverlay, Color");
         splitterBar.w = AnimationEditor.width();
-        splitterBar.bind('ViewportResize', function() {
+        splitterBar.bind('ViewportResize', function () {
             this.w = AnimationEditor.width();
         });
         splitterBar.h = 8;
@@ -226,7 +226,7 @@ Crafty.defineScene("AnimationEditor", function(){
 
 //TODO: Make sure input names are valid with spr_, or add spr_ to all things.
 Crafty.c("SpriteLabel", {
-    init: function() {
+    init: function () {
         this.requires("UIOverlay, InputField");
         this.ID = AnimationEditor.getID();
         this.w = 110;
@@ -259,7 +259,7 @@ Crafty.c("SpriteLabel", {
         this.yBoxLabel = Crafty.e("UIOverlay, AltText");
         this.yBoxLabel.setText("Y:");
 
-        this.one("EnterFrame", function() {
+        this.one("EnterFrame", function () {
             this.xBoxLabel.relativeCenter(this,0,40);
             this.xBox.relativeCenter(this,20,32);
             this.yBoxLabel.relativeCenter(this,60,40);
@@ -272,7 +272,7 @@ Crafty.c("SpriteLabel", {
             this.yBoxLabel._globalZ = this._globalZ;
             this.outline.setGlobalZ(this._globalZ);
         });
-        this.bind("FieldSaved", function() {
+        this.bind("FieldSaved", function () {
             if (AnimationEditor["y"+this.ID] && AnimationEditor["x"+this.ID] &&
                 AnimationEditor["label"+this.ID] && AnimationEditor.labels) {
                 console.log(AnimationEditor.labels);
@@ -292,7 +292,7 @@ Crafty.c("SpriteLabel", {
         });
     },
 
-    reset: function() {
+    reset: function () {
         this.xBox.destroy();
         if (this.xBox.label) {
             this.xBox.label.destroy();
@@ -312,7 +312,7 @@ Crafty.c("SpriteLabel", {
 });
 
 Crafty.c("RectangleBorder", {
-	init: function() {
+	init: function () {
 		this.requires('2D');
 		this.top = Crafty.e("2D, Canvas");
 		this.right = Crafty.e("2D, Canvas");
@@ -325,7 +325,7 @@ Crafty.c("RectangleBorder", {
 		this.sides = [this.top,this.bottom,this.left,this.right];
 	},
 
-	setup: function(w,h,thickness) {
+	setup: function (w,h,thickness) {
 		this.top.w = w;
 		this.top.h = thickness;
 
@@ -345,14 +345,14 @@ Crafty.c("RectangleBorder", {
         this.thickness = thickness;
 	},
 
-	color: function(color){
+	color: function (color) {
 		for (var i = 0; i < this.sides.length; i++) {
 			this.sides[i].requires("Color");
 			this.sides[i].color(color);
 		}
 	},
 
-    b_setCenteredPos: function(xoff,yoff,xside,yside) {
+    b_setCenteredPos: function (xoff,yoff,xside,yside) {
         for (var i = 0; i < this.sides.length; i++) {
 			this.sides[i].requires("UIOverlay");
 		}
@@ -363,7 +363,7 @@ Crafty.c("RectangleBorder", {
         this.bottom.setCenteredPos(xoff,yoff+this.height-this.thickness,xside,yside);
     },
 
-    b_relativeCenter: function(e,xoff,yoff) {
+    b_relativeCenter: function (e,xoff,yoff) {
         for (var i = 0; i < this.sides.length; i++) {
 			this.sides[i].requires("UIOverlay");
 		}
@@ -375,7 +375,7 @@ Crafty.c("RectangleBorder", {
         this.bottom.relativeCenter(e,xoff,yoff+this.height-this.thickness);
     },
 
-    setGlobalZ: function(z) {
+    setGlobalZ: function (z) {
         for (var i = 0; i < this.sides.length; i++) {
 			this.sides[i]._globalZ = z;
 		}

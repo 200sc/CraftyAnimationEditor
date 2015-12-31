@@ -3,7 +3,7 @@ Crafty.c("AltText", {
         this.requires("UIOverlay, Text");
     },
 
-    setText: function(input) {
+    setText: function (input) {
         this.text(input);
         this.textColor(Settings.Text.altColor);
         this.textFont(Settings.Text.defaultStyle);
@@ -15,7 +15,7 @@ Crafty.c("DefText", {
 		this.requires("UIOverlay, Text");
 	},
 
-	setText: function(input) {
+	setText: function (input) {
 		this.text(input);
 		this.textColor(Settings.Text.defaultColor);
 		this.textFont(Settings.Text.defaultStyle);
@@ -27,7 +27,7 @@ Crafty.c("SmallDefText", {
 		this.requires("UIOverlay, Text");
 	},
 
-	setText: function(input) {
+	setText: function (input) {
 		this.text(input);
 		this.textColor(Settings.Text.defaultColor);
 		this.textFont(Settings.Text.smallStyle);
@@ -39,7 +39,7 @@ Crafty.c("SmallAltText", {
 		this.requires("UIOverlay, Text");
 	},
 
-	setText: function(input) {
+	setText: function (input) {
 		this.text(input);
 		this.textColor(Settings.Text.altColor);
 		this.textFont(Settings.Text.smallStyle);

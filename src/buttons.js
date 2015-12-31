@@ -1,5 +1,5 @@
 Crafty.c("HighlightedButton", {
-	init: function() {
+	init: function () {
 		this.requires('2D, Canvas, Mouse');
 		this._outline = Crafty.e('2D, Canvas, Color');
 		if (this.has("UI")) {
@@ -11,31 +11,31 @@ Crafty.c("HighlightedButton", {
 		this._outline.alpha = .0;
 		this.defAlpha = .0;
 		this.attach(this._outline);
-		this.bind('MouseOver', function() {
+		this.bind('MouseOver', function () {
 			this._outline.alpha = .33;
 		});
-		this.bind('MouseOut', function() {
+		this.bind('MouseOut', function () {
 			this._outline.alpha = this.defAlpha;
 		});
-		this.bind('MouseDown', function() {
+		this.bind('MouseDown', function () {
 			this._outline.alpha = .5;
 		});
-		this.bind('MouseUp', function() {
+		this.bind('MouseUp', function () {
 			this._outline.alpha = .33;
 	    });
 	},
 
-	setDefaultTransparency: function(alpha) {
+	setDefaultTransparency: function (alpha) {
 		this.defAlpha = alpha;
 	}
 });
 
 Crafty.c("AddAnimationButton", {
-	init: function() {
+	init: function () {
 		this.requires("UIOverlay, HighlightedButton, __spr_check");
 		this.h = 32;
 		this.w = 32;
-		this.bind("Click", function() {
+		this.bind("Click", function () {
 			if (AnimationEditor.animations.length === 15) {
 				return;
 			}
@@ -59,7 +59,7 @@ Crafty.c("AddAnimationButton", {
 });
 
 Crafty.c("DeleteAnimationButton", {
-	init: function() {
+	init: function () {
 		this.requires("UIOverlay, HighlightedButton, __spr_cross");
 		this.h = 32;
 		this.w = 32;
@@ -67,13 +67,13 @@ Crafty.c("DeleteAnimationButton", {
 });
 
 Crafty.c("AddLabelButton", {
-    init: function() {
+    init: function () {
         this.requires("UIOverlay, HighlightedButton, __spr_check");
         this.h = 32;
         this.w = 32;
         this.xPlace = 0;
         this.yPlace = 30;
-        this.bind("Click", function() {
+        this.bind("Click", function () {
             var label = Crafty.e("SpriteLabel");
             label.setCenteredPos(AnimationEditor.sheetLabels.xoff + this.xPlace,
                                 AnimationEditor.sheetLabels.yoff + this.yPlace,
@@ -90,22 +90,22 @@ Crafty.c("AddLabelButton", {
 });
 
 Crafty.c("ResetButton", {
-	init: function() {
+	init: function () {
 		this.requires("UIOverlay, HighlightedButton, __spr_cross");
 		this.h = 32;
 		this.w = 32;
-        this.bind("Click", function() {
+        this.bind("DoubleClick", function () {
             //Todo: give an 'are you sure' message
-            Crafty("SpriteLabel").each(function(){
+            Crafty("SpriteLabel").each(function () {
                 this.reset();
             });
-            Crafty("AddLabelButton").each(function() {
+            Crafty("AddLabelButton").each(function () {
                 this.xPlace = 0;
                 this.yPlace = 30;
             });
             Crafty("__spr_sheet").destroy();
             AnimationEditor.animations = [];
-            Crafty("AnimationController").each(function() {
+            Crafty("AnimationController").each(function () {
                 this.reset();
             });
             AnimationEditor.curAni = -1;
@@ -116,11 +116,11 @@ Crafty.c("ResetButton", {
 });
 
 Crafty.c("DownloadButton", {
-	init: function() {
+	init: function () {
 		this.requires("UIOverlay, HighlightedButton, __spr_floppy");
         this.h = 32;
 		this.w = 32;
-        this.bind("Click", function() {
+        this.bind("Click", function () {
             if (AnimationEditor.labels && AnimationEditor.labels[0][0]) {
                 var hiddenElement = document.createElement('a');
 
@@ -132,39 +132,39 @@ Crafty.c("DownloadButton", {
                             if (y !== 0 || x !== 0) {
                                 labelString += ",";
                             }
-                            labelString += "\""+AnimationEditor.labels[y][x]+"\"\: ["+x+','+y+']';
+                            labelString += "\""+AnimationEditor.labels[y][x] + "\"\: ["+x+ ',' +y+ ']';
                         }
                     }
                 }
 
                 // write the loadstring
                 var spriteString = "{\"sprites\"\: {" +
-                    "\""+AnimationEditor.filename +"\"\: {" +
+                    "\""+AnimationEditor.filename + "\"\: {" +
                         "\"tile\"\: "+ AnimationEditor.tileWidth + "," +
                         "\"tileh\"\: "+ AnimationEditor.tileHeight + "," +//TODO: Add all labels to the sprite map
-                        "\"map\"\: {"+ labelString +"}," +
+                        "\"map\"\: {"+ labelString + "}," +
                         "\"paddingX\"\: "+ AnimationEditor.padding + "," +
                         "\"paddingY\"\: "+ AnimationEditor.padding +
                     "}"+
                 "}}";
                 // write the component
-                var componentString = "Crafty.c(\""+AnimationEditor.labels[0][0].substring(Settings.label_prefix.length)+"\", {" + String.fromCharCode(13);
-                    componentString += "\tinit: function() {" + String.fromCharCode(13);
+                var componentString = "Crafty.c(\""+AnimationEditor.labels[0][0].substring(Settings.label_prefix.length) + "\", {" + String.fromCharCode(13);
+                    componentString += "\tinit: function () {" + String.fromCharCode(13);
                         componentString += "\t\tthis.loadString =" + spriteString + String.fromCharCode(13);
-                        componentString += "\t\tthis.requires(\""+AnimationEditor.labels[0][0]+","+Settings.def_components+"\");" + String.fromCharCode(13);
-                        for (var i = 0; i < AnimationEditor.animations.length; i++){
+                        componentString += "\t\tthis.requires(\""+AnimationEditor.labels[0][0] + ","+Settings.def_components+ "\");" + String.fromCharCode(13);
+                        for (var i = 0; i < AnimationEditor.animations.length; i++) {
                             a = AnimationEditor.animations[i].animationDetails;
                             if (AnimationEditor["animation"+a.animationID]) {
                                 componentString += "\t\tthis.reel(\"";
-                                    componentString += AnimationEditor["animation"+a.animationID]+"\"," + String.fromCharCode(13);
-                                    componentString += "\t\t\t"+((1/(a.FPS/a.frames.length))*1000)+"," + String.fromCharCode(13);
+                                    componentString += AnimationEditor["animation"+a.animationID] + "\"," + String.fromCharCode(13);
+                                    componentString += "\t\t\t"+ ((1/(a.FPS/a.frames.length))*1000) + "," + String.fromCharCode(13);
                                     componentString += "\t\t\t[";
                                     for (var j = 0; j < a.frames.length; j++) {
                                         if (j !== 0) {
                                             componentString += ",";
                                         }
                                         f = a.frames[j];
-                                        componentString += "["+f.spritex+","+f.spritey+"]";
+                                        componentString += "["+f.spritex+ ","+f.spritey+ "]";
                                     }
                                     componentString += "]";
                                 componentString += ");" + String.fromCharCode(13);
@@ -183,16 +183,16 @@ Crafty.c("DownloadButton", {
 });
 
 Crafty.c("UploadButton", {
-    init: function() {
+    init: function () {
         this.requires("UIOverlay, HighlightedButton, __spr_arrow");
         this.h = 32;
 		this.w = 32;
-        this.bind("Click", function() {
+        this.bind("Click", function () {
             Crafty.trigger("UploadPrep");
             if (AnimationEditor.filename && AnimationEditor.tileWidth &&
                AnimationEditor.tileHeight && AnimationEditor.padding) {
                 var spriteString = "{\"sprites\"\: {" +
-                    "\""+Settings.file_directory_prefix+AnimationEditor.filename +"\"\: {" +
+                    "\""+Settings.file_directory_prefix+AnimationEditor.filename + "\"\: {" +
                         "\"tile\"\: "+ AnimationEditor.tileWidth + "," +
                         "\"tileh\"\: "+ AnimationEditor.tileHeight + "," +
                         "\"map\"\: { \"__spr_sheet\"\: [0,0]}," +
@@ -200,7 +200,7 @@ Crafty.c("UploadButton", {
                         "\"paddingY\"\: "+ AnimationEditor.padding +
                     "}"+
                 "}}";
-                Crafty.load(spriteString, function() {
+                Crafty.load(spriteString, function () {
                     var maxx = 0;
                     var maxy = 0;
                     for (var x = 0; x < Settings.maxSheetWidth; x++) {
