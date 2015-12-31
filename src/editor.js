@@ -8,7 +8,7 @@ AnimationEditor = {
 
     start: function() {
         Crafty.init();
-        Crafty.background('rgb(70,50,70)');
+        Crafty.background(Colors.bg);
         Crafty.scene("AnimationEditor");
     },
 
@@ -35,8 +35,8 @@ AnimationEditor = {
     },
 
     Text: {
-		defaultColor: 'black',
-        altColor: 'white',
+		defaultColor: Colors.blk,
+        altColor: Colors.wht,
 		defaultStyle: {family: 'Verdana', size: '16px'},
 		smallStyle: {family: 'Verdana', size: '10px'}
 	},
@@ -66,7 +66,7 @@ Crafty.defineScene("AnimationEditor", function(){
         sidebarBackground.bind('ViewportResize', function() {
             this.h = AnimationEditor.height();
         });
-        sidebarBackground.color("rgb(120,100,120)");
+        sidebarBackground.color(Colors.side);
         sidebarBackground.setCenteredPos(-256,0,"right","top");
 
         AnimationEditor.baseGlobalZ = sidebarBackground._globalZ;
@@ -186,7 +186,7 @@ Crafty.defineScene("AnimationEditor", function(){
 		var animationTab = Crafty.e("UIOverlay, Color");
 		animationTab.w = 196;
 		animationTab.h = 32;
-		animationTab.color("rgba(90,60,90,.75)");
+		animationTab.color(Colors.tab);
 		animationTab.setCenteredPos(-248,-288,"right","bottom");
 
 		var animationLabel = Crafty.e("UIOverlay, DefText");
@@ -199,14 +199,14 @@ Crafty.defineScene("AnimationEditor", function(){
 		animationBackground.bind('ViewportResize', function() {
             this.w = AnimationEditor.width();
         });
-		animationBackground.color("rgba(60,20,60,.75)");
+		animationBackground.color(Colors.bot);
 		animationBackground.setCenteredPos(0,-256,"left","bottom");
         //animationBackground._globalZ = 100;
 
 		var lowSidebarBackground = Crafty.e("UIOverlay, Color");
         lowSidebarBackground.w = 256;
         lowSidebarBackground.h = 256;
-        lowSidebarBackground.color("rgb(90,60,90)");
+        lowSidebarBackground.color(Colors.side2);
         lowSidebarBackground.setCenteredPos(-256,-256,"right","bottom");
 
 //        var delete_ico = Crafty.e("DeleteAnimationButton");
@@ -226,7 +226,7 @@ Crafty.defineScene("AnimationEditor", function(){
             this.w = AnimationEditor.width();
         });
         splitterBar.h = 8;
-        splitterBar.color("rgb(90,60,90)");
+        splitterBar.color(Colors.side2);
         splitterBar.setCenteredPos(0,-256,"left","bottom");
 
         AnimationEditor.splitterBar = splitterBar;
@@ -248,7 +248,7 @@ Crafty.c("SpriteLabel", {
 
         this.outline = Crafty.e("RectangleBorder");
         this.outline.setup(118, 70, 2);
-        this.outline.color("black");
+        this.outline.color(Colors.blk);
 
         this.xBox = Crafty.e("UIOverlay, InputField");
         this.xBox.w = 30;

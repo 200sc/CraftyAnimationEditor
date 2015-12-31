@@ -1,7 +1,7 @@
 Crafty.c('InputField', {
 	init: function () {
 		this.requires('HighlightedButton, Keyboard, Color');
-        this.color("rgb(255,255,255)");
+        this.color(Colors.wht);
         this.h = 30;
         this.name = "default";
         this.defaultText = "default";

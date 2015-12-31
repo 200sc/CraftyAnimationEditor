@@ -3,7 +3,7 @@ Crafty.c("AnimationDetails", {
 		this.requires('UIOverlay, Color, Keyboard');
 		this.w = 196;
 		this.h = 248;
-		this.color('rgba(150,50,150,.75)');
+		this.color(Colors.anim);
 		this.setCenteredPos(-452,-248,"right","bottom");
 		this.visible = false;
 		this.animationID = AnimationEditor.getID();
@@ -181,7 +181,7 @@ Crafty.c("AnimationController", {
 	},
 
 	showAnimation: function() {
-		this.color("rgba(150,50,150,.75)");
+		this.color(Colors.anim);
 		if (AnimationEditor.curAni !== this.index && AnimationEditor.curAni !== -1) {
 			AnimationEditor.animations[AnimationEditor.curAni].hideAnimation();
 		}

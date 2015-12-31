@@ -7,7 +7,7 @@ Crafty.c("HighlightedButton", {
 		}
 		this._outline.w = this._w;
 		this._outline.h = this._h;
-		this._outline.color('rgb(200,200,255)');
+		this._outline.color(Colors.shd);
 		this._outline.alpha = .0;
 		this.defAlpha = .0;
 		this.attach(this._outline);
@@ -47,9 +47,9 @@ Crafty.c("AddAnimationButton", {
 			controller.index = AnimationEditor.curAni;
 			controller.setCenteredPos(-248,-248+AnimationEditor.curAni*16,"right","bottom");
 			if (AnimationEditor.curAni % 2 == 0) {
-				controller.setColor("rgb(160,100,160)");
+				controller.setColor(Colors.itm1);
 			} else {
-				controller.setColor("rgb(100,100,140)");
+				controller.setColor(Colors.itm2);
 			}
 			controller.setText("animation " + AnimationEditor.curAni);
 			AnimationEditor.animations.push(controller);
