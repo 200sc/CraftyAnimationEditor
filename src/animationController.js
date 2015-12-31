@@ -74,7 +74,6 @@ Crafty.c("AnimationDetails", {
 		for (var i = 0; i < this.frames.length; i++) {
 			reelframes.push([this.frames[i].spritex,this.frames[i].spritey])
 		}
-		console.log(reelframes);
 		this.animationTarget = Crafty.e("UIOverlay, __spr_sheet, SpriteAnimation");
 		this.animationTarget.relativeCenter(this,6,70);
 		this.animationTarget.reel("animation", (1/(this.FPS / this.frames.length))*1000, reelframes);

@@ -39,7 +39,11 @@ AnimationEditor = {
         altColor: 'white',
 		defaultStyle: {family: 'Verdana', size: '16px'},
 		smallStyle: {family: 'Verdana', size: '10px'}
-	}
+	},
+
+    maxSheetWidth: 32,
+
+    maxSheetHeight: 32
 
 };
 
@@ -193,7 +197,7 @@ Crafty.defineScene("AnimationEditor", function(){
         });
 		animationBackground.color("rgba(60,20,60,.75)");
 		animationBackground.setCenteredPos(0,-256,"left","bottom");
-        animationBackground._globalZ = 100;
+        //animationBackground._globalZ = 100;
 
 		var lowSidebarBackground = Crafty.e("UIOverlay, Color");
         lowSidebarBackground.w = 256;
@@ -318,6 +322,7 @@ Crafty.c("AnimationFrame", {
         x = AnimationEditor.tileWidth * Math.floor(y / (256-AnimationEditor.tileHeight));
         y = y % (256-AnimationEditor.tileHeight);
         y = y - (y % AnimationEditor.tileHeight);
+        this._globalZ = AnimationEditor.animationBackground._globalZ + 1;
         this.setCenteredPos(x,-248+y,"left","bottom");
     }
 });

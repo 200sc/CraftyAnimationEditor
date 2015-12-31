@@ -200,12 +200,11 @@ Crafty.c("UploadButton", {
                         "\"paddingY\"\: "+ AnimationEditor.padding +
                     "}"+
                 "}}";
-                console.log(spriteString);
                 Crafty.load(spriteString, function() {
                     var maxx = 0;
                     var maxy = 0;
-                    for (var x = 0; x < 32; x++) {
-                        for (var y = 0; y < 32; y++) {
+                    for (var x = 0; x < AnimationEditor.maxSheetWidth; x++) {
+                        for (var y = 0; y < AnimationEditor.maxSheetHeight; y++) {
                             var e = Crafty.e("SpriteFrame");
 							if (e.img.height <= (y+1)*AnimationEditor.tileHeight ||
 							    e.img.width <= (x+1)*AnimationEditor.tileWidth) {
