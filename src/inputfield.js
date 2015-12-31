@@ -27,7 +27,7 @@ Crafty.c('InputField', {
 
 	_saveField: function (e,force) {
 		if (document.getElementById(this.name) &&
-			document.getElementById(this.name) === document.activeElement) {
+			(document.getElementById(this.name) === document.activeElement || force)) {
             if (this.isDown("ENTER") || force) {
                 this.unbind('KeyDown', this._saveField)
                 AnimationEditor[this.name] = document.getElementById(this.name).value;

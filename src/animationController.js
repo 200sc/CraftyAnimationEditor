@@ -12,7 +12,7 @@ Crafty.c("AnimationDetails", {
 		this.nameBox.w = 130;
 		this.nameBox.name = "animation" + this.animationID;
 		this.nameBox.parent = this;
-		this.nameBox.defaultText = "animation";
+		this.nameBox.defaultText = Settings.animation_name_default;
 
 		this.nameLabel = Crafty.e("AltText");
 		this.nameLabel.setText("Name");
@@ -23,7 +23,7 @@ Crafty.c("AnimationDetails", {
 		this.frameCountBox.w = 32;
 		this.frameCountBox.name = 'frameCount' + this.animationID;
 		this.frameCountBox.parent = this;
-		this.frameCountBox.defaultText = "10";
+		this.frameCountBox.defaultText = String(Settings.animation_frames_default);
         this.nameBox.tabField = this.frameCountBox;
 
 		this.frameLabel = Crafty.e("AltText");
@@ -33,7 +33,7 @@ Crafty.c("AnimationDetails", {
 		this.FPSBox.w = 32;
 		this.FPSBox.name = 'fps' + this.animationID;
 		this.FPSBox.parent = this;
-		this.FPSBox.defaultText = "10";
+		this.FPSBox.defaultText = String(Settings.animation_fps_default);
         this.frameCountBox.tabField = this.FPSBox;
         this.FPSBox.tabField = this.nameBox
 

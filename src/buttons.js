@@ -108,7 +108,7 @@ Crafty.c("ResetButton", {
             Crafty("AnimationController").each(function() {
                 this.reset();
             });
-            Crafty.curAni = -1;
+            AnimationEditor.curAni = -1;
             Crafty.removeAssets(AnimationEditor.spriteString);
             Crafty.spriteString = null;
         });
@@ -148,10 +148,10 @@ Crafty.c("DownloadButton", {
                     "}"+
                 "}}";
                 // write the component
-                var componentString = "Crafty.c(\""+AnimationEditor.labels[0][0].substring(4)+"\", {" + String.fromCharCode(13);
+                var componentString = "Crafty.c(\""+AnimationEditor.labels[0][0].substring(Settings.label_prefix.length)+"\", {" + String.fromCharCode(13);
                     componentString += "\tinit: function() {" + String.fromCharCode(13);
                         componentString += "\t\tthis.loadString =" + spriteString + String.fromCharCode(13);
-                        componentString += "\t\tthis.requires(\""+AnimationEditor.labels[0][0]+",SpriteAnimation"+"\");" + String.fromCharCode(13);
+                        componentString += "\t\tthis.requires(\""+AnimationEditor.labels[0][0]+","+Settings.def_components+"\");" + String.fromCharCode(13);
                         for (var i = 0; i < AnimationEditor.animations.length; i++){
                             a = AnimationEditor.animations[i].animationDetails;
                             if (AnimationEditor["animation"+a.animationID]) {
@@ -192,7 +192,7 @@ Crafty.c("UploadButton", {
             if (AnimationEditor.filename && AnimationEditor.tileWidth &&
                AnimationEditor.tileHeight && AnimationEditor.padding) {
                 var spriteString = "{\"sprites\"\: {" +
-                    "\""+AnimationEditor.filename +"\"\: {" +
+                    "\""+Settings.file_directory_prefix+AnimationEditor.filename +"\"\: {" +
                         "\"tile\"\: "+ AnimationEditor.tileWidth + "," +
                         "\"tileh\"\: "+ AnimationEditor.tileHeight + "," +
                         "\"map\"\: { \"__spr_sheet\"\: [0,0]}," +

@@ -93,7 +93,7 @@ Crafty.defineScene("AnimationEditor", function(){
         var filename = Crafty.e("UIOverlay, InputField");
         filename.setCenteredPos(fileUp.xoff,fileUp.yoff,fileUp.xside,fileUp.yside);
         filename.w = 230;
-        filename.defaultText = "filename.png";
+        filename.defaultText = Settings.filename_default;
         filename.name = "filename";
 
         var filenameLabel = Crafty.e("AltText");
@@ -103,7 +103,7 @@ Crafty.defineScene("AnimationEditor", function(){
         var tileWidth = Crafty.e("UIOverlay, InputField");
         tileWidth.setCenteredPos(fileUp.xoff+70,fileUp.yoff+32,fileUp.xside,fileUp.yside);
         tileWidth.w = 50;
-        tileWidth.defaultText = "32";
+        tileWidth.defaultText = String(Settings.tile_width_default);
         tileWidth.name = "tileWidth";
         filename.tabField = tileWidth;
 
@@ -114,7 +114,7 @@ Crafty.defineScene("AnimationEditor", function(){
         var tileHeight = Crafty.e("UIOverlay, InputField");
         tileHeight.setCenteredPos(fileUp.xoff+70,fileUp.yoff+64,fileUp.xside,fileUp.yside);
         tileHeight.w = 50;
-        tileHeight.defaultText = "32";
+        tileHeight.defaultText = String(Settings.tile_height_default);
         tileHeight.name = "tileHeight";
         tileWidth.tabField = tileHeight;
 
@@ -125,7 +125,7 @@ Crafty.defineScene("AnimationEditor", function(){
         var padding = Crafty.e('UIOverlay, InputField');
         padding.setCenteredPos(fileUp.xoff+70,fileUp.yoff+96,fileUp.xside,fileUp.yside);
         padding.w = 50;
-        padding.defaultText = "2";
+        padding.defaultText = String(Settings.padding_default);
         padding.name = "padding";
         tileHeight.tabField = padding;
         padding.tabField = filename;
@@ -337,7 +337,7 @@ Crafty.c("SpriteLabel", {
         this.requires("UIOverlay, InputField");
         this.ID = AnimationEditor.getID();
         this.w = 110;
-        this.defaultText = "label";
+        this.defaultText = Settings.sprite_label_default;
         this.name = "label" + this.ID;
         this._globalZ = AnimationEditor.baseGlobalZ + 1;
 
@@ -348,7 +348,7 @@ Crafty.c("SpriteLabel", {
         this.xBox = Crafty.e("UIOverlay, InputField");
         this.xBox.w = 30;
         this.xBox.name = "x" + this.ID;
-        this.xBox.defaultText = "0";
+        this.xBox.defaultText = String(Settings.sprite_label_x_default);
         this.xBox.parent = this;
         this.tabField = this.xBox;
 
@@ -357,7 +357,7 @@ Crafty.c("SpriteLabel", {
 
         this.yBox = Crafty.e("UIOverlay, InputField");
         this.yBox.w = 30;
-        this.yBox.defaultText = "0";
+        this.yBox.defaultText = String(Settings.sprite_label_y_default);
         this.yBox.name = "y" + this.ID;
         this.yBox.parent = this;
         this.xBox.tabField = this.yBox;
@@ -382,7 +382,7 @@ Crafty.c("SpriteLabel", {
         this.bind("FieldSaved", function() {
             if (AnimationEditor["y"+this.ID] && AnimationEditor["x"+this.ID] &&
                 AnimationEditor["label"+this.ID] && AnimationEditor.labels) {
-                AnimationEditor.labels[AnimationEditor["y"+this.ID]][AnimationEditor["x"+this.ID]] = "spr_"+AnimationEditor["label"+this.ID];
+                AnimationEditor.labels[AnimationEditor["y"+this.ID]][AnimationEditor["x"+this.ID]] = Settings.label_prefix+AnimationEditor["label"+this.ID];
             }
         });
     },
@@ -404,54 +404,6 @@ Crafty.c("SpriteLabel", {
         }
         this.destroy();
     }
-});
-
-Crafty.c("AltText", {
-    init: function () {
-        this.requires("UIOverlay, Text");
-    },
-
-    setText: function(input) {
-        this.text(input);
-        this.textColor(AnimationEditor.Text.altColor);
-        this.textFont(AnimationEditor.Text.defaultStyle);
-    }
-});
-
-Crafty.c("DefText", {
-	init: function () {
-		this.requires("UIOverlay, Text");
-	},
-
-	setText: function(input) {
-		this.text(input);
-		this.textColor(AnimationEditor.Text.defaultColor);
-		this.textFont(AnimationEditor.Text.defaultStyle);
-	}
-});
-
-Crafty.c("SmallDefText", {
-	init: function () {
-		this.requires("UIOverlay, Text");
-	},
-
-	setText: function(input) {
-		this.text(input);
-		this.textColor(AnimationEditor.Text.defaultColor);
-		this.textFont(AnimationEditor.Text.smallStyle);
-	}
-});
-
-Crafty.c("SmallAltText", {
-	init: function () {
-		this.requires("UIOverlay, Text");
-	},
-
-	setText: function(input) {
-		this.text(input);
-		this.textColor(AnimationEditor.Text.altColor);
-		this.textFont(AnimationEditor.Text.smallStyle);
-	}
 });
 
 Crafty.c("RectangleBorder", {
