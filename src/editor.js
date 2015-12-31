@@ -315,8 +315,8 @@ Crafty.c("AnimationFrame", {
             listpos = this.listpos;
         }
         y = listpos * AnimationEditor.tileHeight;
-        x = AnimationEditor.tileWidth * Math.floor(y / (248-AnimationEditor.tileHeight));
-        y = y % (248-AnimationEditor.tileHeight);
+        x = AnimationEditor.tileWidth * Math.floor(y / (256-AnimationEditor.tileHeight));
+        y = y % (256-AnimationEditor.tileHeight);
         y = y - (y % AnimationEditor.tileHeight);
         this.setCenteredPos(x,-248+y,"left","bottom");
     }
@@ -328,7 +328,7 @@ Crafty.c("SpriteLabel", {
         this.requires("UIOverlay, InputField");
         this.ID = AnimationEditor.getID();
         this.w = 110;
-        this.defaultText = "spr_name";
+        this.defaultText = "label";
         this.name = "label" + this.ID;
         this._globalZ = AnimationEditor.baseGlobalZ + 1;
 
@@ -370,7 +370,7 @@ Crafty.c("SpriteLabel", {
         this.bind("FieldSaved", function() {
             if (AnimationEditor["y"+this.ID] && AnimationEditor["x"+this.ID] &&
                 AnimationEditor["label"+this.ID] && AnimationEditor.labels) {
-                AnimationEditor.labels[AnimationEditor["y"+this.ID]][AnimationEditor["x"+this.ID]] = AnimationEditor["label"+this.ID];
+                AnimationEditor.labels[AnimationEditor["y"+this.ID]][AnimationEditor["x"+this.ID]] = "spr_"+AnimationEditor["label"+this.ID];
             }
         });
     },

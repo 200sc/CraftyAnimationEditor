@@ -123,18 +123,32 @@ Crafty.c("DownloadButton", {
         this.bind("Click", function() {
             if (AnimationEditor.labels && AnimationEditor.labels[0][0]) {
                 var hiddenElement = document.createElement('a');
+
+                var labelString = "";
+
+                for (var y = 0; y < AnimationEditor.labels.length; y++) {
+                    for (var x = 0; x < AnimationEditor.labels[y].length; x++) {
+                        if (AnimationEditor.labels && AnimationEditor.labels[y][x]) {
+                            if (y !== 0 && x !== 0) {
+                                labelString += ",";
+                            }
+                            labelString += "\""+AnimationEditor.labels[y][x]+"\"\: ["+x+','+y+']';
+                        }
+                    }
+                }
+
                 // write the loadstring
-                spriteString = "{\"sprites\"\: {" +
+                var spriteString = "{\"sprites\"\: {" +
                     "\""+AnimationEditor.filename +"\"\: {" +
                         "\"tile\"\: "+ AnimationEditor.tileWidth + "," +
                         "\"tileh\"\: "+ AnimationEditor.tileHeight + "," +//TODO: Add all labels to the sprite map
-                        "\"map\"\: { \""+ AnimationEditor.labels[0][0]+"\"\: [0,0]}," +
+                        "\"map\"\: {"+ labelString +"}," +
                         "\"paddingX\"\: "+ AnimationEditor.padding + "," +
                         "\"paddingY\"\: "+ AnimationEditor.padding +
                     "}"+
                 "}}";
                 // write the component
-                componentString = "Crafty.c(\""+AnimationEditor.labels[0][0].substring(4)+"\", {" + String.fromCharCode(13);
+                var componentString = "Crafty.c(\""+AnimationEditor.labels[0][0].substring(4)+"\", {" + String.fromCharCode(13);
                     componentString += "\tinit: function() {" + String.fromCharCode(13);
                         componentString += "\t\tthis.loadString =" + spriteString + String.fromCharCode(13);
                         componentString += "\t\tthis.requires(\""+AnimationEditor.labels[0][0]+",SpriteAnimation"+"\");" + String.fromCharCode(13);
