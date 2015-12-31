@@ -129,7 +129,7 @@ Crafty.c("DownloadButton", {
                 for (var y = 0; y < AnimationEditor.labels.length; y++) {
                     for (var x = 0; x < AnimationEditor.labels[y].length; x++) {
                         if (AnimationEditor.labels && AnimationEditor.labels[y][x]) {
-                            if (y !== 0 && x !== 0) {
+                            if (y !== 0 || x !== 0) {
                                 labelString += ",";
                             }
                             labelString += "\""+AnimationEditor.labels[y][x]+"\"\: ["+x+','+y+']';
@@ -224,10 +224,13 @@ Crafty.c("UploadButton", {
                         }
                     }
                     AnimationEditor.labels = [];
+                    AnimationEditor.labelOwners = [];
                     for (var y = 0; y <= maxy; y++) {
                         AnimationEditor.labels.push([]);
+                        AnimationEditor.labelOwners.push([]);
                         for (var x = 0; x <= maxx; x++) {
                             AnimationEditor.labels[y].push(null);
+                            AnimationEditor.labelOwners[y].push(null);
                         }
                     }
                     AnimationEditor.spriteString = spriteString;

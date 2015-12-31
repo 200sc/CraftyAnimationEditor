@@ -275,7 +275,19 @@ Crafty.c("SpriteLabel", {
         this.bind("FieldSaved", function() {
             if (AnimationEditor["y"+this.ID] && AnimationEditor["x"+this.ID] &&
                 AnimationEditor["label"+this.ID] && AnimationEditor.labels) {
+                console.log(AnimationEditor.labels);
+                console.log(AnimationEditor.labelOwners);
+                // If the thing we're assigned to is already assigned
+                if (AnimationEditor.labelOwners[AnimationEditor["y"+this.ID]][AnimationEditor["x"+this.ID]]) {
+                    AnimationEditor.labelOwners[AnimationEditor["y"+this.ID]][AnimationEditor["x"+this.ID]].assigned = null;
+                }
+                if (this.assigned) {
+                    AnimationEditor.labels[this.assigned[0]][this.assigned[1]] = null;
+                    AnimationEditor.labelOwners[this.assigned[0]][this.assigned[1]] = null;
+                }
                 AnimationEditor.labels[AnimationEditor["y"+this.ID]][AnimationEditor["x"+this.ID]] = Settings.label_prefix+AnimationEditor["label"+this.ID];
+                this.assigned = [AnimationEditor["y"+this.ID],AnimationEditor["x"+this.ID]];
+                AnimationEditor.labelOwners[AnimationEditor["y"+this.ID]][AnimationEditor["x"+this.ID]] = this;
             }
         });
     },
