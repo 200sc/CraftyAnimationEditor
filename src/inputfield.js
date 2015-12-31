@@ -65,11 +65,11 @@ Crafty.c('InputField', {
 			offsety = 0;
 		}
 		this.label.text(text);
-		this.label.textColor(AnimationEditor.Text.defaultColor);
-		this.label.textFont(AnimationEditor.Text.defaultStyle);
+		this.label.textColor(Settings.Text.defaultColor);
+        this.label.textFont({size: '13px'})
 
-		this.label.setCenteredPos(this.screenoffsetx + offsetx,
-								 this.screenoffsety + 5 + offsety,
+		this.label.setCenteredPos(this.screenoffsetx + 1 + offsetx,
+								 this.screenoffsety + 8 + offsety,
 								 this.xBorder, this.yBorder);
         this.label._globalZ = this._globalZ + 1;
 	}

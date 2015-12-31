@@ -5,8 +5,8 @@ Crafty.c("AltText", {
 
     setText: function(input) {
         this.text(input);
-        this.textColor(AnimationEditor.Text.altColor);
-        this.textFont(AnimationEditor.Text.defaultStyle);
+        this.textColor(Settings.Text.altColor);
+        this.textFont(Settings.Text.defaultStyle);
     }
 });
 
@@ -17,8 +17,8 @@ Crafty.c("DefText", {
 
 	setText: function(input) {
 		this.text(input);
-		this.textColor(AnimationEditor.Text.defaultColor);
-		this.textFont(AnimationEditor.Text.defaultStyle);
+		this.textColor(Settings.Text.defaultColor);
+		this.textFont(Settings.Text.defaultStyle);
 	}
 });
 
@@ -29,8 +29,8 @@ Crafty.c("SmallDefText", {
 
 	setText: function(input) {
 		this.text(input);
-		this.textColor(AnimationEditor.Text.defaultColor);
-		this.textFont(AnimationEditor.Text.smallStyle);
+		this.textColor(Settings.Text.defaultColor);
+		this.textFont(Settings.Text.smallStyle);
 	}
 });
 
@@ -41,7 +41,7 @@ Crafty.c("SmallAltText", {
 
 	setText: function(input) {
 		this.text(input);
-		this.textColor(AnimationEditor.Text.altColor);
-		this.textFont(AnimationEditor.Text.smallStyle);
+		this.textColor(Settings.Text.altColor);
+		this.textFont(Settings.Text.smallStyle);
 	}
 });

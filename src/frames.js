@@ -47,7 +47,7 @@ Crafty.c("SpriteFrame", {
                 this.labelBackground.y = this.y;
                 this.labelBackground.h = 20;
                 context = Crafty.canvasLayer.context;
-                context.font = AnimationEditor.Text.smallStyle;
+                context.font = Settings.Text.smallStyle;
                 this.labelBackground.w = context.measureText(AnimationEditor.labels[this.spritey][this.spritex]).width + 15;
                 this.labelBackground.color('black');
                 this.label = Crafty.e("SmallAltText");

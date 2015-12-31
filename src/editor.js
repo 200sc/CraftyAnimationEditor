@@ -32,19 +32,7 @@ AnimationEditor = {
 
     height: function() {
         return Crafty.viewport._height;
-    },
-
-    Text: {
-		defaultColor: Colors.blk,
-        altColor: Colors.wht,
-		defaultStyle: {family: 'Verdana', size: '16px'},
-		smallStyle: {family: 'Verdana', size: '10px'}
-	},
-
-    maxSheetWidth: 32,
-
-    maxSheetHeight: 32
-
+    }
 };
 
 Crafty.defineScene("AnimationEditor", function(){

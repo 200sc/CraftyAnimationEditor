@@ -20,7 +20,9 @@ Settings = {
         r: 20,
         g: 100,
         b: 140
-    }
+    },
+    maxSheetWidth: 32,
+    maxSheetHeight: 32,
 }
 
 Colors = {
@@ -35,4 +37,11 @@ Colors = {
     shd: 'rgb(200,200,255)',
     blk: "rgb(0,0,0)",
     wht: "rgb(255,255,255)"
+}
+
+Settings.Text = {
+    defaultColor: Colors.blk,
+    altColor: Colors.wht,
+    defaultStyle: {family: 'Verdana', size: '16px'},
+    smallStyle: {family: 'Verdana', size: '10px'}
 }

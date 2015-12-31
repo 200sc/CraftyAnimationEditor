@@ -53,7 +53,7 @@ Crafty.c("AnimationDetails", {
 		this.bind('FieldSaved', function(data) {
 			if (data === this.nameBox.name) {
 				this.parent.setText(AnimationEditor["animation"+this.animationID]);
-				this.parent.text.textColor(AnimationEditor.Text.altColor);
+				this.parent.text.textColor(Settings.Text.altColor);
 			} else if (data === this.FPSBox.name) {
 				this.FPS = AnimationEditor["fps"+this.animationID];
 				if (this.frames.length !== 0) {
@@ -187,7 +187,7 @@ Crafty.c("AnimationController", {
 		}
 		AnimationEditor.curAni = this.index;
 		this.animationDetails.show();
-		this.text.textColor(AnimationEditor.Text.altColor);
+		this.text.textColor(Settings.Text.altColor);
 		this.selected = true;
 		if (this.w === 240) {
 			this.w = 248;
@@ -206,7 +206,7 @@ Crafty.c("AnimationController", {
 		if (AnimationEditor.curAni === this.index) {
 			AnimationEditor.curAni = -1;
 		}
-		this.text.textColor(AnimationEditor.Text.defaultColor);
+		this.text.textColor(Settings.Text.defaultColor);
 		this.animationDetails.hide();
 		this.selected = false;
         AnimationEditor.animationBackground.visible = false;
