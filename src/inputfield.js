@@ -5,36 +5,52 @@ Crafty.c('InputField', {
         this.h = 30;
         this.name = "default";
         this.defaultText = "default";
-        this.bind("UploadPrep", function(){if (this.textbox) {this._saveField(true)}});
-		this.bind('Click', function () {
-			if (this.textbox){
-				return;
-			}
-			this.textbox = Crafty.e('HTML').attr({x:this._x, y:this._y})
-			.append("<form name='"+this.name+"'>" +
-						"</div>" +
-							"<input type='text' id='"+this.name+"' style='width:" + (this._w-3) +"px; height: 24px; text-align: left;'" +
-							"maxlength='40' value='"+this.defaultText+"'>" +
-							"<input type='button' hidden='hidden'>" +
-					"</form>");
-            document.getElementById(this.name).focus();
-            document.getElementById(this.name).select();
-			this.bind('KeyDown', function() {this._saveField(false)});
-		});
+        this.bind("UploadPrep", function(){if (this.textbox) {this._saveField(null,true)}});
+		this.bind('Click', this._initField);
 	},
 
-	_saveField: function (force) {
+    _initField: function() {
+         if (this.textbox){
+            return;
+        }
+        this.textbox = Crafty.e('HTML').attr({x:this._x, y:this._y})
+        .append("<form name='"+this.name+"'>" +
+                    "</div>" +
+                        "<input type='text' id='"+this.name+"' style='width:" + (this._w-3) +"px; height: 24px; text-align: left;'" +
+                        "maxlength='40' value='"+this.defaultText+"'>" +
+                        "<input type='button' hidden='hidden'>" +
+                "</form>");
+        document.getElementById(this.name).focus();
+        document.getElementById(this.name).select();
+        this.bind('KeyDown', function(e) {this._saveField(e,false)});
+    },
+
+	_saveField: function (e,force) {
 		if (document.getElementById(this.name) &&
-			document.getElementById(this.name).focus &&
-			this.isDown("ENTER") || force){
-            this.unbind('KeyDown', this._saveField)
-			AnimationEditor[this.name] = document.getElementById(this.name).value;
-            this.textbox.destroy();
-			this.textbox = null;
-            this.drawText(AnimationEditor[this.name]);
-			if (this.parent) {
-				this.parent.trigger("FieldSaved", this.name);
-			}
+			document.getElementById(this.name) === document.activeElement) {
+            if (this.isDown("ENTER") || force) {
+                this.unbind('KeyDown', this._saveField)
+                AnimationEditor[this.name] = document.getElementById(this.name).value;
+                this.textbox.destroy();
+                this.textbox = null;
+                this.drawText(AnimationEditor[this.name]);
+                if (this.parent) {
+                    this.parent.trigger("FieldSaved", this.name);
+                }
+            }
+            if (this.isDown("TAB") && this.tabField) {
+                e.originalEvent.preventDefault();
+                if (document.getElementById(this.tabField.name)) {
+                    this.one("EnterFrame", function() {
+                        document.getElementById(this.tabField.name).focus();
+                        document.getElementById(this.tabField.name).select();
+                    });
+                } else {
+                    this.one("EnterFrame", function() {
+                        this.tabField._initField();
+                    });
+                }
+            }
         }
 	},
 

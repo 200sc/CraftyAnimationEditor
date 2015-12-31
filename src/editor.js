@@ -105,6 +105,7 @@ Crafty.defineScene("AnimationEditor", function(){
         tileWidth.w = 50;
         tileWidth.defaultText = "32";
         tileWidth.name = "tileWidth";
+        filename.tabField = tileWidth;
 
         var widthLabel = Crafty.e("AltText");
         widthLabel.setCenteredPos(fileUp.xoff,fileUp.yoff+40,fileUp.xside,fileUp.yside);
@@ -115,6 +116,7 @@ Crafty.defineScene("AnimationEditor", function(){
         tileHeight.w = 50;
         tileHeight.defaultText = "32";
         tileHeight.name = "tileHeight";
+        tileWidth.tabField = tileHeight;
 
         var heightLabel = Crafty.e("AltText");
         heightLabel.setCenteredPos(fileUp.xoff,fileUp.yoff+72,fileUp.xside,fileUp.yside);
@@ -125,6 +127,8 @@ Crafty.defineScene("AnimationEditor", function(){
         padding.w = 50;
         padding.defaultText = "2";
         padding.name = "padding";
+        tileHeight.tabField = padding;
+        padding.tabField = filename;
 
         var paddingLabel = Crafty.e("AltText");
         paddingLabel.setCenteredPos(fileUp.xoff,fileUp.yoff+104,fileUp.xside,fileUp.yside);
@@ -346,6 +350,7 @@ Crafty.c("SpriteLabel", {
         this.xBox.name = "x" + this.ID;
         this.xBox.defaultText = "0";
         this.xBox.parent = this;
+        this.tabField = this.xBox;
 
         this.xBoxLabel = Crafty.e("UIOverlay, AltText");
         this.xBoxLabel.setText("X:");
@@ -355,6 +360,8 @@ Crafty.c("SpriteLabel", {
         this.yBox.defaultText = "0";
         this.yBox.name = "y" + this.ID;
         this.yBox.parent = this;
+        this.xBox.tabField = this.yBox;
+        this.yBox.tabField = this;
 
         this.yBoxLabel = Crafty.e("UIOverlay, AltText");
         this.yBoxLabel.setText("Y:");

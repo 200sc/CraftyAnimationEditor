@@ -3,7 +3,7 @@ Crafty.c("AnimationDetails", {
 		this.requires('UIOverlay, Color, Keyboard');
 		this.w = 196;
 		this.h = 248;
-		this.color('rgb(150,50,150)');
+		this.color('rgba(150,50,150,.75)');
 		this.setCenteredPos(-452,-248,"right","bottom");
 		this.visible = false;
 		this.animationID = AnimationEditor.getID();
@@ -24,6 +24,7 @@ Crafty.c("AnimationDetails", {
 		this.frameCountBox.name = 'frameCount' + this.animationID;
 		this.frameCountBox.parent = this;
 		this.frameCountBox.defaultText = "10";
+        this.nameBox.tabField = this.frameCountBox;
 
 		this.frameLabel = Crafty.e("AltText");
 		this.frameLabel.setText("#Frames");
@@ -33,6 +34,8 @@ Crafty.c("AnimationDetails", {
 		this.FPSBox.name = 'fps' + this.animationID;
 		this.FPSBox.parent = this;
 		this.FPSBox.defaultText = "10";
+        this.frameCountBox.tabField = this.FPSBox;
+        this.FPSBox.tabField = this.nameBox
 
 		this.FPSLabel = Crafty.e("AltText");
 		this.FPSLabel.setText("FPS");
@@ -178,7 +181,7 @@ Crafty.c("AnimationController", {
 	},
 
 	showAnimation: function() {
-		this.color("rgb(150,50,150)");
+		this.color("rgba(150,50,150,.75)");
 		if (AnimationEditor.curAni !== this.index && AnimationEditor.curAni !== -1) {
 			AnimationEditor.animations[AnimationEditor.curAni].hideAnimation();
 		}
