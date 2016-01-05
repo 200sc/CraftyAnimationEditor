@@ -17,7 +17,7 @@ Right click on frames in the animation to remove them from the animation.
 
 Click and drag on frames in the sprite sheet to manually replace individual frames in the animation.
 
-Hit clear to scrap all current animations and labels and unload the current sheet. There is no confirmation button for this yet, be careful.
+Double-Click clear to scrap all current animations and labels and unload the current sheet. There is no confirmation button for this yet, be careful.
 
 # License info
 
